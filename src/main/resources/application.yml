@@ -47,14 +47,14 @@ spring:
       max-request-size: 100MB
 
   datasource:
-    url: jdbc:mysql://localhost:3306/styleShare?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/styleShare?createDatabaseIfNotExist=true
     username: root
     password: Sola1224!
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
 #        show_sql: true
