@@ -1,0 +1,349 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+
+    <style>
+        * {
+            font-family: ProximaNova-Thin !important;
+        "Noto Sans KR ExtraLight" !important;
+        }
+
+        #top_search input {
+            width: 335px;
+            height: 44px;
+            display: block;
+            float: left;
+            border: none;
+            font-size: 14px;
+            line-height: 44px;
+            background: none;
+            padding: 0;
+        }
+
+        input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+            height: 40px;
+            line-height: 38px;
+            padding-left: 20px;
+            border: none;
+            background-color: #f2f2f2;
+            border: 1px solid #f2f2f2;
+            font-size: 14px;
+            font-family: "ProximaNova-Regular", "Noto Sans KR";
+            outline: none;
+        }
+
+        .btn_search {
+            width: 30px;
+            height: 30px;
+            margin-left: -1.2em;
+            border: none;
+            line-height: 3.4;
+            /*background-color: rgb(244, 244, 244);*/
+        }
+
+        input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+            height: 40px;
+            line-height: 38px;
+            padding-left: 20px;
+            border: none;
+            background-color: #f2f2f2;
+            border: 1px solid #f2f2f2;
+            font-size: 14px;
+            font-family: "ProximaNova-Regular", "Noto Sans KR";
+            outline: none;
+        }
+
+        #top_search:after {
+            content: "";
+            display: flex;
+            width: 360px;
+            height: 1px;
+            background: #000 !important;
+            /*position: absolute;*/
+            bottom: 15px;
+            left: 16px;
+        }
+
+        button, input, optgroup, select, textarea {
+            font: inherit;
+            margin: 0;
+            color: inherit;
+            line-height: 2.4em;
+        }
+
+        input[type="text" i] {
+            writing-mode: horizontal-tb !important;
+            padding-block: 1px;
+            padding-inline: 2px;
+        }
+
+        input {
+            width: 335px;
+            height: 44px;
+            display: block;
+            float: left;
+            border: none;
+            font-size: 14px;
+            line-height: 44px;
+            background: none;
+            padding: 0;
+        }
+
+
+        table tr {
+            height: 60px;
+        }
+
+        table tr, th, td {
+            vertical-align: middle !important;
+        }
+
+        .div-st {
+            width: 50%;
+        }
+
+        .dis-fl {
+            display: flex;
+            /*padding-top: 60px;*/
+            padding-bottom: 60px;
+        }
+
+        .fl-left {
+            float: left;
+        }
+
+        .text-a-left {
+            text-align: left;
+        }
+
+        .text-a-right {
+            text-align: right;
+        }
+
+        h2 {
+            font-size: 36px !important;
+            padding-bottom: 16px;
+        }
+
+        .se-top {
+            margin-top: 140px
+        }
+
+        h2 {
+            margin-right: 0 !important;
+            float: none !important;
+        }
+
+        .width-90 {
+            width: 90%;
+        }
+
+        p {
+            margin-bottom: 2px;
+            font-weight: 100;
+            font-size: 15px;
+            line-height: 26px;
+        }
+
+        .p-title {
+            /*margin-bottom: 20px !important;*/
+            font-size: 16px;
+            font-family: ProximaNova-Bold !important;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin-bottom: 60px;
+        }
+
+        h3 {
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        .mr-b-10 {
+            margin-top: 10px;
+            margin-bottom: 18px;
+            font-size: 22px;
+        }
+
+        .m-t-20 {
+            margin-top: 26px;
+        }
+
+        .di-wi {
+            width: 1190px !important;
+        }
+
+        .st-w {
+            text-align: center;
+        !important;
+        }
+
+        .st-fl {
+            float: left;
+        }
+    </style>
+</head>
+
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+
+
+<div class="culmn">
+    <!--Home page style-->
+
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+
+    <!-- Banner -->
+    <div class="container di-wi">
+        <section id="intro" class="main">
+            <span class="icon fa-diamond major"></span>
+
+            <section class="st-w">
+                <section>
+                    <h1>스타일 컨설팅 프로세스</h1>
+                    <p>1. 체크리스트를 통해 나의 <span class="p-title">체형을 객관적으로 분석</span>하고, 신체적 장점과 단점을 파악합니다.</p>
+                    <p>2. 체형 분석을 기반으로 나의 바디이미지를 돋보이게 하는 <span class="p-title">스타일 아이템, 핏, 소재 및 디자인을 제안</span>합니다.</p>
+                    <p>3. <span class="p-title">퍼스널컬러 및 선호컬러를 분석</span>하여, 나만의 컬러 팔레트를 완성합니다. 메인, 액센트, 뉴트럴 컬러를 활용한 코디
+                        가이드를 제공합니다.</p>
+                    <p>4. 나의 퍼스널컬러 및 스타일을 종합하여, <span class="p-title">개인 맞춤형 스타일</span> 보고서를 완성합니다.</p><br><br><br>
+                    <div>
+                        <h1>컨설팅비용</h1>
+                        <img alt="" class="width-90" src="/assets/images/cost.png">
+                    </div>
+
+                    <section class="se-top">
+                        <h1>스타일리스트</h1>
+                        <div class="dis-fl">
+                            <div class="div-st">
+                                <img alt="" class="width-90" src="/assets/images/kazuha.png">
+                            </div>
+                            <div class="div-st fl-left text-a-right">
+                                <h2>STYLIST 카즈하</h2>
+                                <div>
+                                    <p class="p-title mr-b-10">추구하는 스타일 - 감각,유니크,발랄</p>
+                                    <p>브랜드 A Hallucination 런칭</p>
+                                    <p>이상봉 브랜드 제너럴 매니저</p>
+                                    <p>MORE THAN WHISKY, CHIVAS 전시</p>
+                                    <p>센트럴 세인트 마틴 예술대학 졸업</p>
+                                    <p>오스왈도 보탱과 이상봉 파리에서 디자인</p>
+                                </div>
+                                <button class="btn black m-t-20">컨설팅예약</button>
+                            </div>
+                        </div>
+                        <div class="dis-fl">
+                            <div class="div-st fl-left text-a-left">
+                                <h2>STYLIST 허윤진</h2>
+                                <div>
+                                    <p class="p-title mr-b-10">추구하는 스타일 - 감각,유니크,발랄</p>
+                                    <p>디자이너 브랜드 런칭 및 운영 8년</p>
+                                    <p>포트폴리오 및 패션 런칭 클래스 수업 경력 5년</p>
+                                    <p>국내외 패션 브랜드 근무 5년 (한*, J**, H** 등)</p>
+                                    <p>패션 매거진 M 에디터 1년6개월</p>
+                                    <p>더치디자인위크 전시</p>
+                                </div>
+                                <button class="btn black m-t-20 st-fl">컨설팅예약</button>
+                            </div>
+                            <div class="div-st">
+                                <img alt="" class="width-90" src="/assets/images/yunjin.png">
+                            </div>
+                        </div>
+                        <div class="dis-fl">
+                            <div class="div-st">
+                                <img alt="" class="width-90" src="/assets/images/chaewon.png">
+                            </div>
+                            <div class="div-st fl-left text-a-right">
+                                <h2>STYLIST 김채원</h2>
+                                <div>
+                                    <p class="p-title mr-b-10">추구하는 스타일 - 감각,유니크,발랄</p>
+                                    <p>패션브랜드 2ND 디자이너 및 크리에이티브 디렉터</p>
+                                    <p>세정과미래 디자이너 한섬 디자이너</p>
+                                    <p>브랜드 티백 대표디자이너</p>
+                                    <p>연세대학교 의류환경, 생활디자인 학사</p>
+                                    <p>패션브랜드 2ND 디자이너 및 크리에이티브 디렉터</p>
+                                    <p>아이디룩 디자이너</p>
+                                </div>
+                                <button class="btn black m-t-20">컨설팅예약</button>
+                            </div>
+                        </div>
+                        <div class="dis-fl">
+                            <div class="div-st fl-left text-a-left">
+                                <h2>STYLIST 사쿠라</h2>
+                                <div>
+                                    <p class="p-title mr-b-10">추구하는 스타일 - 감각,유니크,발랄</p>
+                                    <p>이화여자대학교 의류학박사 졸업</p>
+                                    <p>(주)에이스코리아 써브 패턴/캐드</p>
+                                    <p>입체패턴연구소 연구원</p>
+                                    <p>중부대학교 강의</p>
+                                    <p>서울모드패션학교 한국의상구성강의 외제</p>
+                                </div>
+                                <button class="btn black fl-left m-t-20">컨설팅예약</button>
+                            </div>
+                            <div class="div-st">
+                                <img alt="" class="width-90" src="/assets/images/sakura.png">
+                            </div>
+                        </div>
+                        <div class="dis-fl">
+                            <div class="div-st">
+                                <img alt="" class="width-90" src="/assets/images/eunchae.png">
+                            </div>
+                            <div class="div-st fl-left text-a-right">
+                                <h2>STYLIST 홍은채</h2>
+                                <div>
+                                    <p class="p-title mr-b-10">추구하는 스타일 - 감각,유니크,발랄</p>
+                                    <p>이화여대대학원 의류학 박사수료</p>
+                                    <p>(주) 라시엔느 디자이너</p>
+                                    <p>Co-worker Photographer kimboha 2012 Ewha Fashion Design lab Story 사진전시회 출품</p>
+                                    <p>2018 파리패션위크내 ‘ 큐브쇼룸’</p>
+                                    <p>2018 서울패션위크 제네레이션넥스트 2018 FW 컬렉션 캣워크쇼</p>
+                                    <p>2017. 10 서울패션위크 오프쇼</p>
+                                    <p>London College of Fashion Baccholor 학사</p>
+                                    <p>London College of Fashion Master Degree 석사</p>
+                                    <p>London Korea 쇼케이스 및 팝업스토어 참가 ’</p>
+                                    <p>바농스튜디오 대표 디자이너</p>
+                                </div>
+                                <button class="btn black m-t-20">컨설팅예약</button>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </section>
+        </section>
+    </div>
+</div>
+
+</body>
+
+<footer>
+    <div th:replace="/fragments/footer.html :: footer"></div>
+</footer>
+
+
+</div>
+
+<!-- JS includes -->
+
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+
+</body>
+</html>

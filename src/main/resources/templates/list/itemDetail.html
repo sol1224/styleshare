@@ -1,0 +1,760 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="reset.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/b5b645498b.js" crossorigin="anonymous"></script>
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+
+<!--        <meta name="_csrf" th:content="${_csrf.token}"/>-->
+<!--        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+
+</head>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+            $("input[name=cartChkBox]").change(function () {
+                getOrderTotalPrice();
+            });
+        });
+
+        function getOrderTotalPrice() {
+            var orderTotalPrice = 0;
+            var mileage = 0;
+            $("input[name=cartChkBox]:checked").each(function () {
+                var cartItemId = $(this).val();
+                var price = $("#price_" + cartItemId).attr("data-price");
+                var count = $("#count_" + cartItemId).val();
+                orderTotalPrice += price * count;
+                mileage = orderTotalPrice ? Math.floor(orderTotalPrice * 0.01) : 0;
+
+                console.log(price)
+                console.log(orderTotalPrice)
+                console.log(mileage)
+
+            });
+
+            // orderTotalPrice 값을 천 단위 구분 기호가 있는 형식으로 변환
+            // 'ko-KR'은 한국어 로케일
+            var formattedTotalPrice = orderTotalPrice.toLocaleString('ko-KR');
+            var formattedfoMileage = mileage.toLocaleString('ko-KR');
+
+            // 변경된 형식을 요소에 표시
+            $("#orderTotalPrice").html(formattedTotalPrice + '원');
+            $("#formattedfoMileage").html(formattedfoMileage + '원');
+
+            // 배송비 조건 설정
+            var deliveryFee = 2500; // 기본 배송비는 2500원
+            // orderTotalPrice가 100,000원 이상인 경우 배송비를 0원으로 설정
+            if (orderTotalPrice > 100000) {
+                deliveryFee = 0;
+            }
+            // 'ko-KR'은 한국어 로케일
+            var formattedToDeliveryFee = deliveryFee.toLocaleString('ko-KR');
+            var totalAmt = deliveryFee + orderTotalPrice;
+            var formattedToTotalAmt = totalAmt.toLocaleString('ko-KR');
+
+
+            $("#counterTotdeliveryamt").html(formattedToDeliveryFee);
+            $("#counterTotalAmt").html(formattedToTotalAmt);
+
+        }
+
+        function changeCount(obj) {
+
+            if (!obj || !obj.value) {
+                console.error("Invalid object or value in changeCount function");
+                return;
+            }
+            var count = obj.value;
+            var cartItemId = obj.id.split('_')[1];
+            var price = $("#price_" + cartItemId).data("price");
+            var totalPrice = count * price;
+
+            // totalPrice가 있는 경우 mileage를 계산하고 정수로 변환
+            var mileage = totalPrice ? Math.floor(totalPrice * 0.01) : 0;
+            var formattedMileage = mileage.toLocaleString('ko-KR');
+
+            // 'ko-KR'은 한국어 로케일
+            $("#totalPrice_" + cartItemId).html(totalPrice + "원");
+            $("#mileage_" + cartItemId).html(formattedMileage + "원");
+
+            getOrderTotalPrice();
+
+            $('.micro_btn').on('click', function () {
+                console.log(count);
+                console.log(cartItemId);
+                updateCartItemCount(cartItemId, count);
+            });
+
+        }
+
+        function checkAll() {
+            if ($("#checkall").prop("checked")) {
+                $("input[name=cartChkBox]").prop("checked", true);
+            } else {
+                $("input[name=cartChkBox]").prop("checked", false);
+            }
+            getOrderTotalPrice();
+        }
+
+        function updateCartItemCount(cartItemId, count) {
+            // var token = $("meta[name='_csrf']").attr("content");
+            // var header = $("meta[name='_csrf_header']").attr("content");
+
+            if (isNaN(count) || count < 0) {
+                alert("유효하지 않은 수량입니다. 올바른 수량을 입력해주세요.");
+                return;
+            }
+
+            var url = "/cartItem/" + cartItemId + "?count=" + count;
+
+
+            $.ajax({
+                url: url,
+                type: "PATCH",
+                // beforeSend: function (xhr) {
+                //     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                //     xhr.setRequestHeader(header, token);
+                // },
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    console.log("cartItem count update success");
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+
+                }
+            });
+        }
+
+        function deleteCartItem(obj) {
+
+            var cartItemId = obj.dataset.id;
+            var url = "/cartItem/" + cartItemId;
+            console.log(cartItemId)
+            console.log(cartItemId)
+
+
+            $.ajax({
+                url: url,
+                type: "DELETE",
+                // beforeSend: function (xhr) {
+                //     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                //     xhr.setRequestHeader(header, token);
+                // },
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    location.href = '/cart';
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+
+                }
+            });
+        }
+
+        function orders() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/cart/orders";
+
+            var dataList = new Array();
+            var paramData = new Object();
+
+            $("input[name=cartChkBox]:checked").each(function () {
+                var cartItemId = $(this).val();
+                var data = new Object();
+                data["cartItemId"] = cartItemId;
+                dataList.push(data);
+            });
+
+            paramData['cartOrderDtoList'] = dataList;
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json",
+                data: param,
+                beforeSend: function (xhr) {
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    alert("주문이 완료 되었습니다.");
+                    location.href = '/orders';
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+
+                }
+            });
+        }
+    </script>
+</th:block>
+<!-- 사용자 스크립트 추가(장바구니 수량변경) -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+// 수량 변경 버튼 클릭 시
+            $('.micro_btn').click(function () {
+// 현재 입력 필드를 찾습니다.
+                const input = $(this).siblings('input[type="number"]');
+
+// 입력된 수량을 가져옵니다.
+                const currentCount = parseInt(input.val());
+
+// `changeCount()` 함수를 호출하여 입력된 수량을 사용하여 가격을 업데이트합니다.
+                changeCount(input[0]);
+            });
+
+// 수량 증가 버튼 클릭 시
+            $('.btn_up').click(function () {
+                const input = $(this).siblings('input[type="number"]');
+                let currentCount = parseInt(input.val());
+                currentCount += 1; // 수량 증가
+                input.val(currentCount);
+
+// 입력된 수량을 사용하여 가격을 업데이트합니다.
+                changeCount(input[0]);
+            });
+
+// 수량 감소 버튼 클릭 시
+            $('.btn_down').click(function () {
+                const input = $(this).siblings('input[type="number"]');
+                let currentCount = parseInt(input.val());
+
+                if (currentCount > 1) {
+                    currentCount -= 1; // 수량 감소
+                    input.val(currentCount);
+
+// 입력된 수량을 사용하여 가격을 업데이트합니다.
+                    changeCount(input[0]);
+                }
+            });
+        });
+    </script>
+</th:block>
+<style>
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+    .mr-b-20 {
+        margin-bottom: 20px;
+    }
+
+    .font-700 {
+        font-weight: 700 !important;
+    }
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .h3-font {
+        font-weight: normal !important;
+        font-size: 48px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+    table tr {
+        height: 60px;
+    }
+
+    .li-float {
+        font-size: 15px;
+        font-weight: 500;
+        /*font-family: ProximaNova-Bold !important;*/
+        color: #555555;
+        margin: 28px 40px 0 40px;
+    }
+
+    table tr, th, td {
+        vertical-align: middle !important;
+    }
+
+    .m200 {
+        margin-top: 200px;
+        margin-bottom: 200px;
+    }
+
+    .h3-font {
+        font-weight: normal !important;
+        font-size: 48px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+    .h5-font {
+        font-weight: normal !important;
+        font-size: 30px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+    .float-left-50 {
+        float: left;
+        width: 50%;
+    }
+
+    .float-right-50 {
+        float: right;
+        width: 50%;
+    }
+
+    .ul-inline {
+        display: inline-flex;
+        height: 260px;
+    }
+
+    .mg-r-20 {
+        margin-right: 20px;
+    }
+
+    select {
+        display: none;
+    }
+
+    .ul-fl {
+        display: flex;
+        padding-left: 30px;
+        /*margin-bottom: 12%;*/
+        /*flex: 1;*/
+    }
+
+    .img-resize {
+        width: 600px;
+        height: 700px;
+    }
+
+    .li-resize {
+        width: 454px;
+        padding: 10px;
+        height: 780px;
+        /*margin: 0 auto;*/
+    }
+
+    .font-sm {
+        font-size: 14px;
+        text-align: left;
+        margin-top: 20px;
+        font-family: ProximaNova-Thin, "Noto Sans KR" !important;
+    }
+
+    .font-sl {
+        font-size: 14px;
+        text-align: left;
+        margin-top: 12px;
+        font-family: ProximaNova-Thin, "Noto Sans KR" !important;
+    }
+
+    p {
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .font-title {
+        font-size: 26px;
+        font-family: ProximaNova-Semibold !important;
+        font-weight: 900;
+        text-align: left;
+
+    }
+
+
+    .custom-select {
+        /*display: inline-block;*/
+        width: 100px;
+        height: 48px;
+        /*border: solid 1px #c4ccd8;*/
+        background-color: #ffffff;
+        box-sizing: border-box;
+        font-size: 12px;
+        cursor: pointer;
+        position: relative;
+        outline: 0px;
+    }
+
+    .custom-select-list {
+        position: absolute;
+        font-size: 12px;
+        width: 160px;
+        height: 162px;
+        z-index: 15;
+        border: solid 1px #c4ccd8;
+        background-color: #ffffff;
+        text-align: left;
+        margin-top: -3px;
+        box-sizing: border-box;
+    }
+
+
+    .price-st {
+        float: left;
+        font-size: 16px;
+        font-family: ProximaNova-Bold !important;
+    }
+
+    .dis-st {
+        float: right;
+        font-size: 16px;
+        font-family: ProximaNova-Bold !important;
+        color: #FA5500
+    }
+    .form-control2{
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        color: black;
+        background-color: #fff;
+        background-image: none;
+
+    }
+
+
+</style>
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+<div class="culmn">
+    <!--Home page style-->
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+
+    <div class="row" style="position: relative; height: auto; margin: 0 auto; padding-top: 220px">
+        <div class="main_features fix wrapper" style="margin-top: 46px">
+            <div class="text-center">
+
+            </div>
+        </div>
+    </div>
+
+
+    <section id="features" class="features bg-white center">
+        <div>
+            <div class="row" style="position: relative; width: 90%;  margin: 0 auto;">
+                <div class="main_features fix wrapper">
+
+
+                    <section style="width: 100%;">
+                        <div class="main_features fix" style="margin: 0 auto; display: flex; width: 1200px;">
+                            <div style="float:left;width: 46%">
+                                <img class="img-resize"
+                                     th:src="${item.imgStr}">
+                            </div>
+                            <div style="margin-left: 40px; width: 56%;" th:object="${item}">
+                                <input type="hidden" id="itemId" name="itemId" th:value="${item.id}">
+                                <div style="display: flex; width: 100%">
+                                    <p class="font-title" style="margin-top: 6px; float:left; width: 96%"
+                                       th:text="${item.brand}">SUNGBOON EDITOR</p>
+                                    <i style="padding-top: 4px" class="fa-regular fa-heart"></i>
+                                </div>
+                                <p class="font-sl" th:text="${item.name}">[24매] 딥 콜라겐 마스크팩(6BOX)</p>
+                                <div style="display: flex">
+                                    <p class="font-sm"
+                                       style="font-size: 18px; font-family: ProximaNova-Semibold !important; float: left;"
+                                       th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}">
+                                        24,500원</p>
+                                    <p class="font-sm"
+                                       style="font-size: 18px; margin-left: 16px; color: #FA5500; font-family: ProximaNova-Semibold !important; font-weight: 900"
+                                       th:text="${item.discount != 0 ? + item.discount + '%' : ''}">
+                                        45%</p>
+                                </div>
+                                <div style="margin-top: 20px; border-top: 2px solid #000; padding-top: 14px">
+
+                                    <section style="display: flex; text-align: left;">
+                                        <div style="font-weight: 900; float:left; width: 52%; font-size: 14px">신규회원 혜택
+                                        </div>
+                                        <div style="width: 48%;">
+                                            <div style="margin-bottom: 6px; display: flex">
+                                                <p style="float:left; width: 80%; font-size: 14px"><U
+                                                        style="font-weight: 900; font-family: ProximaNova-Semibold !important; font-size: 15px !important;">WELCOME</U>
+                                                    등급을 위한 회원 혜택</p>
+                                            </div>
+                                            <div style="font-size: 12px; display: flex">
+                                                <p style="float:left; width: 80%">월별 등급 쿠폰 증정</p>
+                                                <p style="float:right; width: 20%; text-align: right; font-weight: bold">
+                                                    최대 20%</p>
+                                            </div>
+                                            <div style="margin-bottom: 6px; font-size: 12px; display: flex">
+                                                <p style="float:left; width: 80%">최대 적립 마일리지</p>
+                                                <p style="float:right; width: 20%; text-align: right; font-weight: bold">
+                                                    4,158M</p>
+                                            </div>
+                                            <div style="margin-bottom: 6px; font-size: 12px; display: flex">
+                                                <p style="font-size: 11px; line-height:15px">
+                                                    매달 1일 구매 누적 금액에 따라 변경된 등급별 쿠폰을 다운 받으실 수 있습니다.
+                                                </p>
+                                            </div>
+                                            <a href="/members/new">
+                                                <button class="btn white"
+                                                        style="margin-top: 14px; width: 100%; color:#FA5500 !important; border: 1px solid #E7E7E7 !important; float:left; background-color: #FAFAFA">
+                                                    신규 회원 가입하러 가기
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </section>
+                                    <section style="display: flex; text-align: left; margin-top: 14px">
+                                        <div style="font-weight: 900; float:left; width: 56%; font-size: 14px">배송비</div>
+                                        <div style="width: 44%;">
+                                            <div style="margin-bottom: 6px; display: flex">
+                                                <p style="float:left; width: 80%; font-weight: bold;font-size: 14px !important;">
+                                                    40,000 이상 구매시 무료</p>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section style="border-top: 1px solid #e6e6e6; margin-top: 16px; padding-top: 16px">
+                                        <p style="font-weight: 900">배송</p>
+                                        <p>- 모든 상품은 무료로 배송되며 배송 기간은 영업일 기준 1-3일 소요됩니다. (재고 이동이 필요한 상품의 경우 배송이 최대 5-10
+                                            영업일
+                                            지연될 수 있습니다.)</p>
+                                        <p>- 스토어 픽업을 선택하신 경우 역시 스토어에 제품이 준비되는 기간은 영업일 기준 2-3일입니다.</p>
+
+
+                                        <p style="font-weight: 900">결제수단</p>
+                                        <p>- 국내발행 신용카드</p>
+                                        <p>- 간편결제</p>
+                                        <p style="font-weight: 900">교환/환불</p>
+                                        <p>- 환불을 희망하실 경우, 상품을 받은 날로부터 7일 이내 웹사이트 또는 에르메스 고객센터를 통해 환불 접수를 해주십시오.</p>
+                                        <p>- 부띡 매장에서는 온라인 스토어 구매 상품의 환불을 접수할 수 없습니다.</p>
+                                        <p>- 교환을 희망하실 경우, 상품을 받을 날로부터 30일 이내 가까운 부띡 매장을 찾아주십시오.</p>
+                                        <p>- 보안택을 훼손/제거하거나 인보이스가 없는 상품에 대해서는 교환/환불이 불가능합니다.</p>
+                                        <p>- 교환/환불 절차에 대한 자세한 안내는 자주 묻는 질문을 통해 확인해 주십시오. </p>
+                                        <div style="display: inline-flex; float: right ">
+                                        <span style="float: left;font-family: ProximaNova-Regular;font-size: 16px; align-content: center; margin-right: 10px;">주문수량</span><input type="number" name="count" id="count" class="form-control2" value="1" min="1" style="width: 100px; height: 50px; background-color: white">
+                                        </div>
+
+
+
+
+                                    </section>
+                                    <section>
+                                        <form style="display: inline-flex; margin-top: 28px">
+                                            <input type="hidden" th:value="${_csrf?.token}" />
+                                            <button type="button" class="btn black"
+                                                    style="float:left; margin: 0 5px 0 5px" onclick="addCart()">장바구니 담기
+                                            </button>
+
+                                            <button type="button" class="btn white" id="backButton" style="float:left; margin: 0 5px 0 5px">계속쇼핑하기</button>
+
+
+
+                                        </form>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</section>
+
+
+</div>
+
+<script>
+    // 버튼 요소를 선택합니다.
+    var backButton = document.getElementById('backButton');
+
+    // 버튼을 클릭했을 때 이전 페이지로 이동하는 함수를 정의합니다.
+    backButton.addEventListener('click', function() {
+        // 브라우저의 이전 페이지로 이동합니다.
+        window.history.back();
+    });
+</script>
+
+<!-- 사용자 스크립트 추가 -->
+<script th:inline="javascript">
+
+    <!-- 장바구니 담기 -->
+    function addCart() {
+
+        var count = $("#count").val();
+        var itemId = $("#itemId").val();
+        var cartForm = {
+            itemId: itemId,
+            count: count
+        };
+
+        $.ajax({
+            url: "/cart",
+            data: cartForm,
+            type: 'POST',
+            success: function (result) {
+                alert("상품을 담았습니다.");
+                location.href = "/cart";
+            },
+
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("로그인 후 이용해주세요.");
+                location.href = "/login"
+            }
+        })
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.custom-select').on('click', function () {
+            $(this).toggleClass('selected');
+            $('.custom-select-list').hide();
+            $(this).next('.custom-select-list').toggle();
+        });
+
+        $('.custom-select-option').on('click', function () {
+            let value = $(this).attr('value');
+            let selectList = $(this).closest('.custom-select-list');
+            let selectText = selectList.prev('.custom-select').find('.custom-select-text');
+            let selectOrigin = selectList.next('.select-origin');
+
+            selectText.text($(this).text());
+            selectOrigin.val(value);
+            selectList.hide();
+        });
+    });
+
+    // 옵션 리스트 외 다른 곳 클릭 시 숨기기
+    $(document).on('click', function (event) {
+        if (!$(event.target).closest('.custom-select').length) {
+            $('.custom-select-list').hide();
+            $('.custom-select').removeClass('selected');
+        }
+    });
+</script>
+</script>
+
+
+
+</body>
+
+<footer>
+    <div th:replace="/fragments/footer.html :: footer"></div>
+</footer>
+
+
+</div>
+
+<!-- JS includes -->
+
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<!--<script src="assets/js/jquery.easypiechart.min.js"></script>-->
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<!--<script src="assets/js/slick.js"></script>-->
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,584 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
+
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+</head>
+<style>
+
+    .filebox .upload-name {
+        display: inline-block;
+        height: 40px;
+        padding: 0 10px;
+        vertical-align: middle;
+        border: 1px solid #dddddd;
+        width: 78%;
+        color: #999999;
+    }
+
+    .filebox label {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #fff;
+        vertical-align: middle;
+        background-color: #999999;
+        cursor: pointer;
+        height: 40px;
+        margin-left: 10px;
+    }
+
+    .filebox input[type="file"] {
+        position: absolute;
+        width: 0;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    li {
+        display: inline;
+    }
+
+    .pl:focus {
+        border: 1px solid ghostwhite;
+        box-sizing: border-box;
+        border-radius: 10px;
+        outline: 3px solid ghostwhite;
+        border-radius: 5px;
+        background-color: #f8f8f8;
+    }
+
+    label {
+        margin-right: 40px;
+    }
+
+    .width-line-up {
+        display: ruby !important;
+    }
+
+    .reg-title {
+        text-align: center;
+        margin-top: 60px;
+    }
+
+    .text-width-200 {
+        width: 200px;
+    }
+
+    .essential-mark {
+        color: #ff1414;
+        display: inline-block;
+        padding-top: 2px;
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    table {
+        width: 100%;
+        border-top: 2px solid #171717;
+        border-bottom: 1px solid #171717;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin-bottom: 60px;
+    }
+
+    th, td {
+        border-bottom: 1px solid lightgray;
+        /*padding-top: 16px;*/
+        padding-bottom: -20px;
+    }
+
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+    .mr-b-20 {
+        margin-bottom: 20px;
+    }
+
+    .font-700 {
+        font-weight: 700 !important;
+    }
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .h3-font {
+        font-weight: normal !important;
+        font-size: 48px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+    table tr {
+        height: 60px;
+    }
+
+    table tr, th, td {
+        vertical-align: middle !important;
+    }
+
+    input {
+        padding-left: 6px !important;
+    }
+</style>
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            var errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+            bindDomEvent();
+        });
+
+        function bindDomEvent() {
+            $(".custom-file-input").on("change", function () {
+                var fileName = $(this).val().split("\\").pop();  //이미지 파일명
+                var fileExt = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
+                fileExt = fileExt.toLowerCase(); //소문자 변환
+
+                if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp") {
+                    alert("이미지 파일만 등록이 가능합니다.");
+                    return;
+                }
+
+                $(this).siblings(".custom-file-label").html(fileName);
+            });
+        }
+    </script>
+
+    <script th:inline="javascript">
+        function updateFileName(input) {
+            var fileName = input.files[0].name; // 선택된 파일의 이름 가져오기
+            document.getElementById('fileName').value = fileName; // 파일 이름을 input 요소에 설정
+        }
+    </script>
+
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+<div class="culmn">
+    <!--Home page style-->
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+    <!-- Banner -->
+    <section id="intro" class="main">
+
+
+        <!--================================ FORM ================================-->
+
+        <h4 style="font-weight: lighter !important; font-size: 40px;margin-bottom: 20px" class="reg-title">MY PAGE</h4>
+        <ul style="margin-top: 10px; margin-bottom: 46px; font-size: smaller" class="reg-title">
+            <li>HOME</li>
+            <li>></li>
+            <li>MY PAGE</li>
+            <li>></li>
+            <li>정보관리</li>
+            <li>></li>
+            <li>회원정보 수정</li>
+        </ul>
+
+        <form role="form row g-3"
+              style="margin: auto; width: 84%; margin-top: 16px; margin-bottom: 80px; line-height: 54px; font-size: 14px"
+              method="post"
+              enctype="multipart/form-data" th:object="${member}" th:action="@{/mypage}">
+
+            <table>
+                <div style="display: flex; justify-content: space-between;">
+                    <h5 style="margin: 8px 0 8px 0; font-weight: normal">주문 내역</h5>
+                </div>
+                <tr>
+                    <td style="width: 240px;">
+                        <div class="width-line-up">아이디</div>
+                    </td>
+                    <td style="width: 800px;">
+                        <input class="width-line-up readonly" th:field="*{id}" type="text" th:value="${member.id}"
+                               readonly>
+                    </td>
+                </tr>
+            </table>
+
+
+            <table>
+                <!--            <h4 style="font-weight: normal">회원정보 수정</h4>-->
+                <div style="display: flex; justify-content: space-between;">
+                    <h5 style="margin: 8px 0 8px 0; font-weight: normal">기본 정보</h5>
+                    <p style="font-size: smaller"><span class="essential-mark"> *</span>필수 입력 항목</p>
+                </div>
+
+                <tr>
+                    <td style="width: 240px;">
+                        <div class="width-line-up">아이디</div>
+                    </td>
+                    <td style="width: 800px;">
+                        <input class="width-line-up readonly" th:field="*{id}" type="text" th:value="${member.id}"
+                               readonly>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width: 240px;">
+                        <div class="width-line-up">이름</div>
+                    </td>
+                    <td style="width: 800px;">
+                        <input class="width-line-up readonly" th:field="*{name}" type="text" th:value="${member.name}"
+                               readonly>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width: 240px;">
+                        <div class="width-line-up">휴대폰번호<span
+                                class="essential-mark"> *</span></div>
+                    </td>
+                    <td style="width: 800px;">
+                        <input class="width-line-up" th:field="*{phoneNumber}" type="text"
+                               th:value="${member.phoneNumber}"
+                        >
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width: 240px;">
+                        <div class="width-line-up">생년월일</div>
+                    </td>
+                    <td style="width: 800px; display: inline-flex">
+                        <input class="readonly" th:field="*{birth}" type="text" th:value="${member.birth}" readonly>
+                        <p style="margin-left: 10px;" class="consult">※ 본인인증 후 인증 완료된 생년월일으로 생일쿠폰이 발송됩니다.</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="input-group-prepend text-width-200">
+                            이메일<span class="essential-mark"> *</span>
+                        </div>
+                    </td>
+                    <td style="width: 800px;">
+                        <input class="width-line-up" th:field="*{email}" type="text" th:value="${member.email}"
+                        >
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="input-group-prepend text-width">
+                            이벤트 정보<span
+                                class="essential-mark"> *</span>
+                        </div>
+                    </td>
+                    <td>
+
+                   <span class="input_button radio personal_info_input">
+    <div th:each="status : ${eventStatuses}" class="width-line-up">
+        <input class="form-check-input" type="radio" th:id="'status_' + ${status.name()}"
+               th:value="${status}" th:name="eventReceipt" th:checked="${member.eventReceipt == status}"/>
+        <label class="width-interval form-check-label" th:for="'status_' + ${status.name()}"
+               th:text="${status.getDescription()}"></label><br/>
+    </div>
+</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="input-group-prepend text-width">
+                            개인정보 수집 및 이용안내 (선택)
+                        </div>
+                    </td>
+                    <td>
+
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <h5 style="margin: 8px 0 8px 0; font-weight: normal">기본 정보</h5>
+                            <p style="font-size: smaller"><span class="essential-mark"> *</span>필수 입력 항목</p>
+                        </div>
+
+                        <span class="input_button radio personal_info_input">
+
+
+<div th:each="status : ${personalInformation}" class="width-line-up">
+    <input class="form-check-input" type="radio" th:id="'status_' + ${status.name()}"
+           th:value="${status}" th:name="personalInformation" th:checked="${member.personalInformation == status}"/>
+    <label class="width-interval form-check-label" th:for="'status_' + ${status.name()}"
+           th:text="${status.getDescription()}"></label><br/>
+</div>
+</span>
+
+
+                    </td>
+                </tr>
+            </table>
+
+            </span>
+            <div style="margin: 52px 0 150px 0; display: flex; justify-content: center;">
+                <button type="submit" class="btn btn-primary">취소</button>
+                <button type="submit" class="btn btn-primary black">수정</button>
+            </div>
+
+            <div style="display: flex">
+                <h5 style="margin: 8px 0 8px 0; font-weight: normal">주소록</h5></div>
+            <div>
+                <tr>
+                    <td>
+                        <div class="bx_my_info">
+                            <h4>기본주소</h4>
+                            <p style="float: left"
+                               th:text="${member.address.address + ' ' + member.address.detailAddress}"></p>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+            <br>
+            <div>
+                <div style="display: flex">
+                    <h5 style="margin: 8px 0 8px 0; font-family:ProximaNova-Thin !important; font-weight: 900">S
+                        POINT</h5></div>
+                <tr>
+                    <td>
+                        <div class="bx_my_info">
+                            <h4>충전금</h4>
+                            <p style="float: left; margin-right: 50px"
+                               th:text="${member.money != null && member.money != 0 ? #numbers.formatInteger(member.money, 3, 'COMMA') + '원' : '0원'}"></p>
+                        </div>
+                        <button type="button" id="chargeButton" class="btn black"
+                                style="font-size: 16px; line-height: normal !important; margin-top: 20px; font-family: ProximaNova-regular !important;">
+                            포인트결제
+                        </button>
+                    </td>
+                </tr>
+            </div>
+        </form>
+
+
+    </section>
+
+
+    <footer>
+        <div th:replace="/fragments/footer.html :: footer"></div>
+    </footer>
+</div>
+</tr>
+</table>
+
+<script th:inline="javascript">
+    document.getElementById('chargeButton').addEventListener('click', function () {
+        var screenWidth = window.screen.width;
+        var screenHeight = window.screen.height;
+        var windowWidth = 600;
+        var windowHeight = 200;
+
+        var left = (screenWidth - windowWidth) / 2;
+        var top = (screenHeight - windowHeight) / 2;
+
+        var newWindow = window.open('', '_blank', 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + left + ',top=' + top);
+
+        // CSS 스타일 추가
+        var style = document.createElement('style');
+        style.textContent = `
+        body {
+            font-family: 'ProximaNova-regular';
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center; /* 가로 정렬을 가운데 정렬로 설정 */
+        }
+        .btn {
+            font-size: 16px;
+            line-height: normal;
+            margin: 5px;
+            width: 160px;
+            height: 50px;
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+
+        }
+        .mileage-info {
+           font-size: 20px;
+            text-align: center; /* 텍스트를 가운데 정렬로 설정 */
+            margin-top:20px;
+            margin-bottom:-16px;
+            font-weight:700;
+            font-family: ProximaNova-bold;
+        }
+        .mileage-info2 {
+           font-size: 16px;
+            text-align: center; /* 텍스트를 가운데 정렬로 설정 */
+            margin-top:20px;
+            font-family: ProximaNova-regular;
+            }
+    `;
+        newWindow.document.head.appendChild(style);
+
+        // 마일리지 혜택 안내 문구
+        var mileagesInfo = document.createElement('p');
+        mileagesInfo.textContent = 'S POINT 충전';
+        mileagesInfo.className = 'mileage-info';
+        newWindow.document.body.appendChild(mileagesInfo);
+
+        var mileagesInfo = document.createElement('p');
+        mileagesInfo.textContent = '마일리지 충전 시 포인트 혜택이 가득 ';
+        mileagesInfo.className = 'mileage-info2';
+        newWindow.document.body.appendChild(mileagesInfo);
+
+        var buttonContainer = document.createElement('div');
+        buttonContainer.className = 'btn-container';
+        newWindow.document.body.appendChild(buttonContainer);
+
+        // 버튼 생성 및 클릭 이벤트 핸들러 추가
+        function createButton(amount) {
+            var button = document.createElement('button');
+            button.textContent = amount.toLocaleString() + '원 충전';
+            button.value = amount;
+            button.className = 'btn btn-primary black';
+            button.onclick = function () {
+                var clickedAmount = parseInt(button.value); // 클릭한 버튼의 값 저장
+                redirectToMyPage(clickedAmount); // 마이페이지로 리다이렉트
+                newWindow.close();
+            };
+            buttonContainer.appendChild(button);
+        }
+
+        // 버튼 생성
+        createButton(100000); // 100,000원 버튼
+        createButton(150000); // 150,000원 버튼
+        createButton(200000); // 200,000원 버튼
+
+
+        function redirectToMyPage(amount) {
+            var redirectUrl = '/mypage?amount=' + amount; // amount 값을 URL에 포함시킴
+
+            $.ajax({
+                url: '/mypage', // 수정된 URL을 사용
+                type: 'POST',
+                data: {amount: amount}, // 데이터를 전송
+                success: function (result, status, xhr) {
+                    if (xhr.status === 200) {
+                        alert("충전이 완료되었습니다");
+                        location.href = redirectUrl;
+                    } else {
+                        alert("실패");
+                        location.href = "/mypage";
+                    }
+                },
+                error: function () {
+                    alert("실패");
+                    location.href = "/mypage";
+                }
+            });
+        }
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- JS includes -->
+
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+
+</body>
+</html>

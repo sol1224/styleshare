@@ -1,0 +1,624 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
+
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+</head>
+<style>
+    * {
+        font-family: ProximaNova-Light !important;, "Noto Sans KR";
+    }
+
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    table tr {
+        height: 60px;
+    }
+
+    table tr, th, td {
+        vertical-align: middle !important;
+    }
+
+    .h3-font {
+        font-weight: normal !important;
+        font-size: 48px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+
+    .filebox .upload-name {
+        display: inline-block;
+        height: 40px;
+        padding: 0 10px;
+        vertical-align: middle;
+        border: 1px solid #dddddd;
+        width: 78%;
+        color: #999999;
+    }
+
+    .filebox label {
+        /*display: block;*/
+        /*position: absolute;*/
+        top: 0;
+        right: 0;
+        width: 140px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: #fff;
+        font-size: 14px;
+        background-color: #7d7d7d;
+    }
+
+    .filebox input[type="file"] {
+        position: absolute;
+        width: 0;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    .pl {
+        width: 200px;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 3px;
+        padding: 12px 13px;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        margin-bottom: 20px;
+    }
+
+    .pl:focus {
+        border: 1px solid ghostwhite;
+        box-sizing: border-box;
+        border-radius: 10px;
+        outline: 3px solid ghostwhite;
+        border-radius: 5px;
+        background-color: #f8f8f8;
+    }
+
+
+    .essential-mark {
+        color: #ff1414;
+        display: inline-block;
+        padding-top: 2px;
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    table {
+        width: 100%;
+        border-top: 1px solid #444444;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border-bottom: 1px solid lightgray;
+        padding-top: 16px;
+        padding-bottom: -20px;
+    }
+
+
+    label {
+        width: 100px;
+        font-family: ProximaNova-Light !important;, "Noto Sans KR";
+        font-size: 14px;
+        align-content: center;
+    }
+
+    input {
+        width: 500px;
+        padding-left: 10px !important;
+    }
+
+    .field-error {
+        font-size: 12px;
+        color: red;
+        font-family: ProximaNova-Light !important;, "Noto Sans KR";
+        /*align-content: center;*/
+        padding-left: 10px;
+        padding-top: 9px;
+    }
+
+    span {
+        vertical-align: middle;
+        display: inline-block;
+        padding-top: 2px;
+    }
+
+    .input-border {
+        background-color: white !important;
+        border: 1px solid #ccc !important;
+    }
+
+    .btn-small {
+        height: 40px;
+        font-size: 14px;
+        line-height: 38px;
+    }
+
+    .btn-gray {
+        border-color: #7d7d7d;
+        background-color: #7d7d7d;
+        color: #fff;
+    }
+
+    .li-st {
+        font-size: 20px;
+        margin: 0 10px 0 10px
+    }
+
+    .p-st {
+        font-size: 14px;
+        font-weight: bold !important;
+        border-bottom: 2px solid black;
+        line-height: 50px
+    }
+
+    .di-st2 {
+        width: 1140px;
+        margin: 0 auto
+    }
+
+    .st-le {
+        text-align: left;
+    }
+
+    .ul-st2 {
+        text-align: center;
+        font-weight: 900 !important;
+        font-size: small;
+    }
+
+    .sp-st {
+        font-size: 16px !important;
+    " class=" essential-mark
+    }
+
+    .dk-st {
+        color: darkgray
+    }
+
+    .la-st {
+        float: left;
+        margin-right: 200px
+    }
+
+    .form-sty {
+        margin: auto;
+        width: 100%;
+        margin-top: 60px;
+        margin-bottom: 80px;
+    }
+
+    .dis-st {
+        display: inline-flex;
+        margin: 5px 0 5px 0;
+    }
+
+    .wid-900 {
+        width: 900px
+    }
+
+    .input-st {
+        padding-right: 10px;
+        margin-left: 10px;
+        width: 130px
+
+    }
+
+    .fo-st {
+        width: 50%;
+        padding-left: -10px;
+        display: inline;
+    }
+
+    .can-st {
+        text-align: center;
+        margin-top: 40px
+    }
+
+    .wid-400 {
+        width: 400px
+    }
+
+    .col-st {
+        display: inline-block;
+        margin-top: 4px
+    }
+    .wi-130 {
+        width: 130px;
+        margin-left: 10px;
+    }
+</style>
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            var errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+            bindDomEvent();
+        });
+
+        function bindDomEvent() {
+            $(".custom-file-input").on("change", function () {
+                var fileName = $(this).val().split("\\").pop();  //이미지 파일명
+                var fileExt = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
+                fileExt = fileExt.toLowerCase(); //소문자 변환
+
+                if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp") {
+                    alert("이미지 파일만 등록이 가능합니다.");
+                    return;
+                }
+
+                $(this).siblings(".custom-file-label").html(fileName);
+            });
+        }
+    </script>
+
+    <script th:inline="javascript">
+        function updateFileName(input) {
+            var fileName = input.files[0].name; // 선택된 파일의 이름 가져오기
+            document.getElementById('fileName').value = fileName; // 파일 이름을 input 요소에 설정
+        }
+    </script>
+
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+<div class="culmn st-le">
+    <!--Home page style-->
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+
+    <!--================================ FORM ================================-->
+
+    <div class="di-st2">
+
+        <section id="intro" class="main">
+            <span class="icon fa-diamond major"></span>
+            <h3 class="h3-font">JOIN MEMBER</h3><br>
+
+            <section>
+                <ul class="ul-st2">
+                    <a href="/notice">
+                        <li class="li-float li-st">1. 약관동의</li>
+                    </a>
+                    <a>
+                        <li class="li-float li-st">></li>
+                    </a>
+                    <a href="/board">
+                        <li class="li-float li-st">2. 회원정보입력</li>
+                    </a>
+                    <a>
+                        <li class="li-float li-st">></li>
+                    </a>
+                    <a href="#">
+                        <li class="li-float li-st">3. 가입완료</li>
+                    </a>
+                </ul>
+                <br>
+            </section>
+        </section>
+
+
+        <p class="p-st">
+
+            <span class="sp-st">* </span> 표시는 필수 입력 항목입니다.<small class="dk-st"> (회원정보는 개인정보 보호방침 취급방침에 따라 안전하게
+            보호됩니다.)</small></p>
+
+
+        <form class="row g-3 form-sty"
+              action="" th:action th:object="${memberFormDto}" method="post">
+
+            <div class="dis-st">
+                <label for="id" class="la-st">아이디<span
+                        class="essential-mark"> *</span></label>
+                <input type="text" class="wid-400 form-control input-border" id="id" th:field="*{id}"
+                       th:errorclass="field-error" placeholder="아이디 입력(6~20자)">
+                <button class="btn-gray btn-small wi-130" onclick="checkId()">중복체크</button>
+                <!-- id ajax 중복체크 -->
+                <script>
+                    function checkId(){
+                        var id = $('#id').val(); //id값이 "id"인 입력란의 값을 저장
+                        $.ajax({
+                            url:'./idCheck', //Controller에서 요청 받을 주소
+                            type:'post', //POST 방식으로 전달
+                            data:{id:id},
+                            success:function(cnt){ //컨트롤러에서 넘어온 cnt값을 받는다
+                                if(cnt == 0){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
+                                    $('.id_ok').css("display","inline-block");
+                                    $('.id_already').css("display", "none");
+                                    alert("사용 가능한 ID 입니다");
+                                } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
+                                    $('.id_already').css("display","inline-block");
+                                    $('.id_ok').css("display", "none");
+                                    alert("이미 존재하는 아이디입니다");
+                                    // $('#id').val('');
+                                }
+                            },
+                            error:function(){
+                                alert("에러입니다");
+                            }
+                        });
+                    };
+                </script>
+            </div>
+            <div class="dis-st">
+                <label for="password" class="la-st">비밀번호<span
+                        class="essential-mark"> *</span></label>
+                <input type="password" class="wid-400 form-control input-border" id="password"
+                       th:field="*{password}"
+                       th:errorclass="field-error" placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~20자)">
+                <div class="field-error" th:errors="*{password}"/>
+            </div>
+            <div class="dis-st">
+                <label for="passwordCheck" class="form-label la-st">비밀번호 확인<span
+                        class="essential-mark"> *</span></label>
+                <input type="password" class="wid-400 form-control input-border" id="passwordCheck"
+                       th:field="*{passwordCheck}"
+                       th:errorclass="field-error" placeholder="비밀번호가 재입력" onchange="check()">
+                <div class="field-error" th:errors="*{passwordCheck}"/>
+            </div>
+            <div id="check" class="field-error" >
+                패스워드가 일치하지 않습니다.
+            </div>
+
+            <script>
+                function check() {
+                    let password = $("#password").val();
+                    let passwordCheck = $("#passwordCheck").val();
+
+                    if (password!==passwordCheck) {
+                        $("#check").show();
+                    } else{
+                        $("#check").hide();
+                    }
+                }
+                $(document).ready(function() {
+                    $("#check").hide();
+                });
+
+                $(document).ready(function() {
+                    $("#check").hide();
+
+                    // form submit 시 check 함수 호출하여 패스워드 확인
+                    $("form").submit(function(event) {
+                        check(); // form 전송 전에 한 번 더 확인
+                        if ($("#check").is(":visible")) {
+                            event.preventDefault(); // 패스워드 불일치 시 submit 막기
+                            alert("패스워드가 일치하지 않습니다. 다시 확인해주세요.");
+                        }
+                    });
+                });
+            </script>
+
+            <div class="dis-st">
+                <label for="name" class="form-label la-st">이름<span
+                        class="essential-mark"> *</span></label>
+                <input type="text" class="wid-400 form-control input-border" th:field="*{name}"
+                       th:errorclass="field-error" id="name" placeholder="이름을 입력해주세요">
+                <div class="field-error" th:errors="*{name}"/>
+            </div>
+            <div class="dis-st">
+                <label for="phoneNumber" class="form-label la-st">전화번호<span
+                        class="essential-mark"> *</span></label>
+                <input type="text" class="wid-400 form-control input-border" th:field="*{phoneNumber}"
+                       th:errorclass="field-error" id="phoneNumber" placeholder="휴대폰 번호 입력('-'제외 11자리)">
+                <div class="field-error" th:errors="*{phoneNumber}"/>
+            </div>
+            <div class="dis-st">
+                <label for="email" class="form-label la-st">이메일 주소<span
+                        class="essential-mark"> *</span></label>
+                <!-- 셀렉트 변경 예정-->
+                <input type="text" class="wid-400 form-control input-border" th:field="*{email}"
+                       th:errorclass="field-error" id="email" placeholder="이메일 주소">
+            </div>
+            <div class="dis-st">
+                <label for="birth" class="form-label la-st">생년월일</label>
+                <!-- 셀렉트 변경 예정 -->
+                <input type="text" class="wid-400 form-control input-border" th:field="*{birth}"
+                       th:errorclass="field-error" id="birth" placeholder="1991.03.12">
+            </div>
+
+
+            <div class="col-12 col-st">
+                <label for="address" class="form-label">주소</label><br/>
+                <input type="text" class="fo-st form-control mb-2" id="zipp_code_id" name="zipp_code" maxlength="10"
+                       placeholder="우편번호">
+                <input type="button" id="address" class="input-st btn-gray btn-small" onclick="execDaumPostcode()"
+                       value="우편번호 찾기"><br>
+                <input type="text" class="wid-900 form-control mb-2" name="user_add1" id="UserAdd1"
+                       maxlength="40" placeholder="기본 주소를 입력하세요" required th:field="*{address.address}">
+                <input type="text" class="wid-900 form-control" name="user_add2" id="UserAdd2"
+                       maxlength="40" placeholder="상세 주소를 입력하세요" th:field="*{address.detailAddress}">
+            </div>
+
+
+            <div class="can-st">
+                <button type="button" th:onclick="|location.href='@{/}'|" class="btn btn-primary">취소</button>
+                <button type="submit" class="btn btn-primary black">확인</button>
+            </div>
+            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}">
+        </form>
+    </div>
+
+
+    <footer>
+        <div th:replace="/fragments/footer.html :: footer"></div>
+    </footer>
+</div>
+
+
+<script>
+    $("#file").on('change', function () {
+        var name = $("#file").val();
+        $(".upload-name").val(name);
+    });
+</script>
+
+<script>
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 팝업을 통한 검색 결과 항목 클릭 시 실행
+                var addr = ''; // 주소_결과값이 없을 경우 공백
+                var extraAddr = ''; // 참고항목
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 도로명 주소를 선택
+                    addr = data.roadAddress;
+                } else { // 지번 주소를 선택
+                    addr = data.jibunAddress;
+                }
+
+                if (data.userSelectedType === 'R') {
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    if (extraAddr !== '') {
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                } else {
+                    document.getElementById("UserAdd1").value = '';
+                }
+
+                // 선택된 우편번호와 주소 정보를 input 박스에 넣는다.
+                document.getElementById('zipp_code_id').value = data.zonecode;
+                document.getElementById("UserAdd1").value = addr;
+                document.getElementById("UserAdd1").value += extraAddr;
+                document.getElementById("UserAdd2").focus(); // 우편번호 + 주소 입력이 완료되었음으로 상세주소로 포커스 이동
+            }
+        }).open();
+    }
+</script>
+
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- JS includes -->
+
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<!--<script src="assets/js/jquery.easypiechart.min.js"></script>-->
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<!--<script src="assets/js/slick.js"></script>-->
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+
+</body>
+</html>

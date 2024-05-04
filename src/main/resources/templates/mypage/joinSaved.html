@@ -1,0 +1,309 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
+
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+</head>
+<style>
+    * {
+        font-family: ProximaNova-Light !important;, "Noto Sans KR";
+    }
+
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    table tr {
+        height: 60px;
+    }
+
+    table tr, th, td {
+        vertical-align: middle !important;
+    }
+
+
+    .filebox .upload-name {
+        display: inline-block;
+        height: 40px;
+        padding: 0 10px;
+        vertical-align: middle;
+        border: 1px solid #dddddd;
+        width: 78%;
+        color: #999999;
+    }
+
+    .filebox label {
+        /*display: block;*/
+        /*position: absolute;*/
+        top: 0;
+        right: 0;
+        width: 140px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: #fff;
+        font-size: 14px;
+        background-color: #7d7d7d;
+    }
+
+    .filebox input[type="file"] {
+        position: absolute;
+        width: 0;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    .pl {
+        width: 200px;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 3px;
+        padding: 12px 13px;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        margin-bottom: 20px;
+    }
+
+    .pl:focus {
+        border: 1px solid ghostwhite;
+        box-sizing: border-box;
+        border-radius: 10px;
+        outline: 3px solid ghostwhite;
+        border-radius: 5px;
+        background-color: #f8f8f8;
+    }
+
+    table {
+        width: 100%;
+        border-top: 1px solid #444444;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border-bottom: 1px solid lightgray;
+        padding-top: 16px;
+        padding-bottom: -20px;
+    }
+
+
+    label {
+        width: 100px;
+        font-family: ProximaNova-Light !important;, "Noto Sans KR";
+        font-size: 14px;
+        align-content: center;
+    }
+
+    input {
+        width: 500px;
+        padding-left: 10px !important;
+    }
+
+
+    span {
+        vertical-align: middle;
+        display: inline-block;
+        padding-top: 2px;
+    }
+
+    .di-st {
+        width: 1140px;
+        margin: 0 auto
+    }
+
+    .se-st {
+        margin-top: 320px;
+        margin-bottom: 40px;
+        border-bottom: 1px solid #666666;
+    }
+
+    .cu-st {
+        text-align: left;
+
+    }
+
+    .al-ce {
+        text-align: center
+
+    }
+
+    .wi-70 {
+        width: 70px;
+    }
+
+    .mg-40 {
+        argin-bottom: 40px
+    }
+
+    .ta-st {
+        width: 70%;
+        margin: 0 auto;
+        border: none !important;
+
+    }
+
+    .fi-st {
+        text-align: center;
+        margin: 40px 0 40px 0;
+
+    }
+</style>
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<div class="culmn cu-st">
+    <!--Home page style-->
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+
+    <!--================================ FORM ================================-->
+
+    <div class="di-st">
+
+        <section class="align-center se-st">
+            <div class="al-ce">
+                <img class="wi-70" src="/assets/images/checkmark1.png">
+                <h1 class="h1-font">회원가입이 <b>완료</b> 되었습니다!</h1><br>
+                <p>회원가입을 축하합니다.</p>
+                <p class="mg-40">로그인 후 다양한 서비스를 이용해보세요.</p>
+            </div>
+        </section>
+
+        <table class="row g-3 table-blank ta-st"
+               action="" th:action th:object="${newMember}">
+            <tr>
+                <td>
+                    <label for="id" class="form-label">아이디</label>
+                </td>
+                <td>
+                    <input type="text" class="form-control" id="id" th:field="*{id}"
+                           th:errorclass="field-error" placeholder="아이디 입력(6~20자)" th:value="${newMember.id}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="name" class="form-label">이름</label>
+                </td>
+                <td>
+                    <input type="text" class="form-control" th:field="*{name}"
+                           th:errorclass="field-error" id="name" placeholder="이름을 입력해주세요" th:value="${newMember.name}"
+                           readonly>
+                </td>
+            </tr>
+        </table>
+        <div class="find-btn fi-st">
+            <button type="button" th:onclick="|location.href='@{/login}'|" class="btn btn-primary find-btn2 black">로그인
+            </button>
+            <button type="button" class="btn btn-primary find-btn2"
+                    onclick="location.href='editForm.html'"
+                    th:onclick="|location.href='@{/}'|">홈으로
+            </button>
+        </div>
+        </section>
+
+
+    </div>
+
+    <footer>
+        <div th:replace="/fragments/footer.html :: footer"></div>
+    </footer>
+</div>
+
+<!-- JS includes -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>
