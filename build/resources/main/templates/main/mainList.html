@@ -1,0 +1,466 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+</head>
+<style>
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    table tr {
+        height: 60px;
+    }
+
+    table tr, th, td {
+        vertical-align: middle !important;
+    }
+
+    .m200 {
+        margin-top: 200px;
+        margin-bottom: 200px;
+    }
+
+    .h3-font {
+        font-weight: normal !important;
+        font-size: 48px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+    .float-left-50 {
+        float: left;
+        width: 50%;
+    }
+
+    .float-right-50 {
+        float: right;
+        width: 50%;
+    }
+
+    .ul-inline {
+        display: inline-flex;
+        height: 260px;
+    }
+
+    .mg-r-20 {
+        margin-right: 20px;
+    }
+
+    .ul-fl {
+        display: flex;
+        padding-left: 30px;
+        /*margin-bottom: 12%;*/
+        /*flex: 1;*/
+    }
+
+    .img-resize {
+        width: 242px;
+        height: 320px;
+    }
+
+    .li-resize {
+        width: 340px;
+    }
+
+    .font-sm {
+        font-size: 12px;
+    }
+
+    .font-title {
+        font-size: 14px;
+        font-family: ProximaNova-Semibold !important;
+        font-weight: 700;
+    }
+
+
+</style>
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+
+
+<!-- Preloader -->
+<div id="loading">
+    <div id="loading-center">
+        <div id="loading-center-absolute">
+            <div class="object" id="object_one"></div>
+            <div class="object" id="object_two"></div>
+            <div class="object" id="object_three"></div>
+            <div class="object" id="object_four"></div>
+        </div>
+    </div>
+</div><!--End off Preloader -->
+
+
+<div class="culmn">
+    <!--Home page style-->
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+    <!--Home Sections-->
+
+    <section id="home" class="home bg-black fix"> <!-- home : main 이미지 변경-->
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="main_home text-center">
+                    <div class="col-md-12">
+                        <div class="hello">
+                            <div class="slid_item">
+                                <div class="home_text ">
+                                </div>
+                            </div><!-- End off slid item -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!--About Section-->
+    <section id="about" class="about bg-yellow roomy-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="main_about text-center">
+                        <!--                        <h2 class="text-white">- & -</h2>-->
+                        <img class="m200" style="width: 90%" src="/assets/images/m2.png">
+                        <img class="m200" src="/assets/images/m3.png">
+                        <img lass="m200" src="/assets/images/m5.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!--Featured Section-->
+
+    <section id="features" class="features bg-white">
+        <div>
+            <div class="row" style="position: relative;
+    width: 100%;
+    height: auto;">
+                <div class="main_features fix roomy-70 wrapper">
+                    <div class="text-center">
+                        <h3 class="h3-font">STYLESHARE PICK!</h3><br>
+                        <h6>스타일을 공유하면 POINT 즉시지급!</h6><br><br>
+                        <div class="grid-item post-transition metal numberGreaterThan50">
+                            <div class="float-left-50">
+                                <div class="grid-item post-transition metal numberGreaterThan50">
+                                    <img style="width: 100%; padding-left: 14px" alt=""
+                                         src="/assets/images/maintest.jpg">
+                                </div><!-- End off grid item -->
+
+                            </div>
+                            <div class="float-right-50">
+                                <ul class="ul-fl">
+                                    <li class="li-resize width-fix grid-item post-transition metal numberGreaterThan50">
+                                        <img class="img-resize" src="/assets/images/mi1.png">
+                                        <div>
+                                            <p class="font-title">H&M</p>
+                                            <p class="font-sm">[주말특가][사은품증정]<br>
+                                                스모킹 바디콘 드레스 크림색 1231096001</p>
+                                        </div>
+                                    </li>
+                                    <li class="li-resize width-fix grid-item post-transition metal numberGreaterThan50">
+                                        <img class="img-resize" src="/assets/images/mi2.png">
+                                        <div>
+                                            <p class="font-title">Amour moier</p>
+                                            <p class="font-sm">[단독특가][사은품증정]<br>
+                                                하프 셔링 랩 티셔츠 블랙 amr1810</p>
+                                        </div>
+                                    </li>
+                                    <li class="li-resize width-fix grid-item post-transition metal numberGreaterThan50">
+                                        <img class="img-resize" src="/assets/images/mi3.png">
+                                        <div>
+                                            <p class="font-title">LOSSYROW</p>
+                                            <p class="font-sm">[단독특가][1+1]<br>
+                                                Signature Logo Half-Sleeve T-shirt [12color]</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="ul-fl"
+                                    style=" width: 50%; bottom: 0;position: absolute;align-content: end; bottom: 0;">
+                                    <li class="li-resize width-fix grid-item post-transition metal numberGreaterThan50">
+                                        <img class="img-resize" src="/assets/images/mi4.png">
+                                        <div>
+                                            <p class="font-title">LE</p>
+                                            <p class="font-sm">[한정특가][사은품증정]<br>
+                                                light blue denim shorts (blue)</p>
+                                        </div>
+                                    </li>
+                                    <li class="li-resize width-fix grid-item post-transition metal numberGreaterThan50">
+                                        <img class="img-resize" src="/assets/images/mi5.png">
+                                        <div>
+                                            <p class="font-title">RE_L</p>
+                                            <p class="font-sm">[한정특가][예약상품]<br>
+                                                Drawing v cardigan (ivory)</p>
+                                        </div>
+                                    </li>
+                                    <li class="li-resize width-fix grid-item post-transition metal numberGreaterThan50">
+                                        <img class="img-resize" src="/assets/images/mi6.png">
+                                        <div>
+                                            <p class="font-title">JOORTI</p>
+                                            <p class="font-sm">[스프링세일]<br>
+                                                [세트]하프 리본 가디건+슬리브리스 세트 마룬레드</p>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End off row -->
+        </div><!-- End off container -->
+    </section><!-- End off Featured Section-->
+
+
+    <!--Choose section-->
+    <section style="margin-top: 50px; margin-bottom: 50px">
+        <div class="choose_mac" style="margin-top: 160px">
+            <div class="choose_slide">
+                <div class="choose_item">
+                    <img src="/assets/images/r1.png" alt="">
+                </div>
+                <div class="choose_item">
+                    <img src="/assets/images/r2.png" alt="">
+                </div>
+                <div class="choose_item">
+                    <img src="/assets/images/r3.png" alt="">
+                </div>
+            </div><!-- End off col-md-6 -->
+
+
+        </div><!-- End off row -->
+    </section><!-- End off choose section -->
+
+
+    <!--Portfolio Section-->
+    <section id="portfolio" class="portfolio margin-top-120">
+        <!-- Portfolio container-->
+        <div class="container" style="width: 1190px !important;">
+            <div>
+                <div class="main-portfolio roomy-80">
+                    <h3 class="h3-font" style="margin-top: 40px">YOUR STYLE</h3><br>
+                    <div class="grid text-center">
+                        <div>
+                            <div class="grid-item transition metal ium">
+                                <img alt="" src="/assets/images/y4.png">
+                                <div class="grid_hover_area text-center">
+                                    <div class="girid_hover_text m-top-110">
+                                        <h4 class="text-white">Your Work Title</h4>
+                                        <p class="text-white">- Business Card, Branding</p>
+                                        <a href="/assets/images/y4.png" class="btn btn-primary popup-img">View
+                                            Project</a>
+                                    </div>
+                                </div><!-- End off grid Hover area -->
+                            </div><!-- End off grid item -->
+
+                            <div class="grid-item metalloid ">
+                                <img alt="" src="/assets/images/y1.png">
+                                <div class="grid_hover_area text-center">
+                                    <div class="girid_hover_text m-top-180">
+                                        <h4 class="text-white">Your Work Title</h4>
+                                        <p class="text-white">- Business Card, Branding</p>
+                                        <a href="/assets/images/y1.png" class="btn btn-primary popup-img">View
+                                            Project</a>
+                                    </div>
+                                </div><!-- End off grid Hover area -->
+                            </div><!-- End off grid item -->
+
+                            <div class="grid-item post-transition metal numberGreaterThan50">
+                                <img alt="" src="/assets/images/y8.png">
+                                <div class="grid_hover_area text-center">
+                                    <div class="girid_hover_text m-top-50">
+                                        <h4 class="text-white">Your Work Title</h4>
+                                        <p class="text-white">- Business Card, Branding</p>
+                                        <a href="/assets/images/y8.png" class="btn btn-primary popup-img">View
+                                            Project</a>
+                                    </div>
+                                </div><!-- End off grid Hover area -->
+                            </div><!-- End off grid item -->
+
+                            <div style="height: 446px; !important;" class="grid-item post-transition metal ium">
+                                <img alt="" src="/assets/images/y2.png">
+                                <div class="grid_hover_area text-center">
+                                    <div class="girid_hover_text m-top-180">
+                                        <h4 class="text-white">Your Work Title</h4>
+                                        <p class="text-white">- Business Card, Branding</p>
+                                        <a href="/assets/images/y2.png" class="btn btn-primary popup-img">View
+                                            Project</a>
+                                    </div>
+                                </div><!-- End off grid Hover area -->
+                            </div><!-- End off grid item -->
+
+                            <div style="height: 382px; !important;" class="grid-item metal ar">
+                                <img alt="" src="/assets/images/y5.png">
+                                <div class="grid_hover_area text-center">
+                                    <div class="girid_hover_text m-top-110">
+                                        <h4 class="text-white">Your Work Title</h4>
+                                        <p class="text-white">- Business Card, Branding</p>
+                                        <a href="/assets/images/y5.png" class="btn btn-primary popup-img">View
+                                            Project</a>
+                                    </div>
+                                </div><!-- End off grid Hover area -->
+                            </div><!-- End off grid item -->
+
+                            <div style="height: 258px; !important;" class="grid-item alkali ar">
+                                <img alt="" src="/assets/images/y9.png">
+                                <div class="grid_hover_area text-center">
+                                    <div class="girid_hover_text m-top-50">
+                                        <h4 class="text-white">Your Work Title</h4>
+                                        <p class="text-white">- Business Card, Branding</p>
+                                        <a href="/assets/images/y9.png" class="btn btn-primary popup-img">View
+                                            Project</a>
+                                    </div>
+                                </div><!-- End off grid Hover area -->
+                            </div><!-- End off grid item -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- Portfolio container end -->
+    </section><!-- End off portfolio section -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="main_about text-center">
+                    <img class="m200" src="/assets/images/coupon.png"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="widget_area">
+                <div class="col-md-100" style="display: flex">
+                    <div class="d-st">
+                        <h3 class="mg-t-10 h-float">NEWS</h3>
+                        <h3 class="mg-t-10 mg-rg">+</h3>
+                        <table class="tb-s">
+                            <tr>
+                                <td>[안내] 사이트 점검으로 인한 서비스 일시중지 (3/23 토)</td>
+                            </tr>
+                            <tr>
+                                <td>[안내] 설 연휴 배송/반품 일정 및 고객센터 휴무 안내</td>
+                            </tr>
+                            <tr>
+                                <td>[안내] 금융상품 판매대리·중개업자 증서 게시</td>
+                            </tr>
+                            <tr>
+                                <td>[안내] 사이트 점검으로 인한 서비스 일시중지 (1/22일)</td>
+                            </tr>
+                            <tr>
+                                <td>[안내] 개인정보 처리방침 변경 안내(2024.01.18)</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="width: 700px; margin: 30px">
+                        <h5>고객센터</h5>
+                        <h2>1577-5267</h2>
+                        <div class="di-inline">
+                            <p>운영시간 : 평일 09:00~18:00 (점심시간 : 12:00~13:00)</p>
+                            <p style="float: left">cs_help@styleshare.co.kr</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div th:replace="/fragments/footer.html :: footer"></div>
+    </footer>
+
+
+</div>
+
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<!--<script src="assets/js/jquery.easypiechart.min.js"></script>-->
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<!--<script src="assets/js/slick.js"></script>-->
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+
+</body>
+</html>

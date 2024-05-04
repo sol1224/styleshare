@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    table tr {
+        height: 60px;
+    }
+</style>
+<th:block th:fragment="navbar">
+    <nav class="navbar navbar-default bootsnav navbar-fixed no-background white">
+        <!-- Start Top Search -->
+        <div class="top-search">
+            <div class="container">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                    <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+                </div>
+            </div>
+        </div>
+        <!-- End Top Search -->
+        <div id="navbar">
+            <img style="width: 100%; height: auto" src="/assets/images/headBar.png">
+
+            <div style="display: flex; height: 70px; align-items: center; margin: -8px 14px 0 14px">
+                <a href="/"><img style="width: auto; height: 26px;" src="/assets/images/logo7.png"></a>
+                <div style="margin-left: auto; margin-right: auto;">
+                    <form method="get" action="/search" role="search">
+                        <div id="top_search" class="g_search active wrap">
+
+                            <label for="keyword" class="sr-only">검색</label>
+                            <input style="margin-top: 30px" type="text" placeholder="검색하고 다양한 혜택을 받아보세요!"
+                                   maxlength="80" id="keyword" name="keyword" th:value="${param.keyword}">
+                            <button class="btn_search" type="button">
+                                <img style="margin-top: 36px" src="/assets/images/wing.png" alt="" onclick="">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div style="margin-left: 10px;">
+                    <ul style="font-size: small; display: flex; justify-content: flex-end;">
+                        <li><a sec:authorize="isAuthenticated()" href="/mypage" th:class="mg-rg-16">마이페이지</a></li>
+                        <li><a sec:authorize="isAuthenticated()" href="/cart" th:class="mg-rg-16">장바구니</a></li>
+                        <li><a sec:authorize="hasRole('ADMIN')" href="/newItem" th:class="mg-rg-16">신규등록</a></li>
+                        <li><a sec:authorize="isAnonymous()" href="/login">로그인</a></li>
+                        <li><a sec:authorize="isAuthenticated()" href="/logout">로그아웃</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="global_search global_nav_wrap">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <ul class="nav navbar-nav navbar-right menufont" id="navbar-list">
+                    <li><a href="/intro">브랜드</a></li>
+                    <li><a href="/find-store">오프라인 스토어</a></li>
+                    <li><a style="color: #e6e6e6">|</a></li>
+                    <li><a href="/new">NEW</a></li>
+                    <li><a href="/women">WOMEN</a></li>
+                    <li><a href="/men">MEN</a></li>
+                    <li><a href="/life">LIFE</a></li>
+                    <li><a href="/trip">TRAVEL</a></li>
+                    <!--                    <li><a href="#test">SHARE</a></li> &lt;!&ndash; 작업 예정 &ndash;&gt;-->
+                    <li><a href="/board">CUSTOMER</a></li>
+                    <li><a style="color: #e6e6e6">|</a></li>
+                    <li><a href="/best">베스트</a></li>
+                    <li><a href="/sale">특가 상품</a></li>
+                    <li><a href="/md">PICK'S MD</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <script>
+        window.onscroll = function () {
+            scrollFunction()
+        };
+
+        function scrollFunction() {
+            var navbarList = document.getElementById("navbar-list");
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                navbarList.style.position = "fixed";
+                navbarList.style.top = "0";
+                navbarList.style.width = "100%";
+                navbarList.style.zIndex = "1000";
+            } else {
+                navbarList.style.position = "relative";
+                navbarList.style.top = "auto";
+            }
+        }
+    </script>
+    <script>
+        var prevScrollpos = window.pageYOffset;
+        window.onscroll = function () {
+            var currentScrollPos = window.pageYOffset;
+            if (prevScrollpos > currentScrollPos || currentScrollPos === 0) {
+                document.getElementById("navbar").classList.remove('hidden');
+            } else {
+                document.getElementById("navbar").classList.add('hidden');
+            }
+            prevScrollpos = currentScrollPos;
+        }
+    </script>
+</th:block>
+
+
+</html>

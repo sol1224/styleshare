@@ -1,0 +1,227 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+</head>
+<style>
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    table tr {
+        height: 60px;
+    }
+
+    table tr, th, td {
+        vertical-align: middle !important;
+    }
+
+</style>
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+<div class="culmn">
+    <!--Home page style-->
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+
+    <!-- Banner -->
+    <section id="intro" class="main" style="padding: 8em;}">
+        <span class="icon fa-diamond major"></span>
+        <h1>게시판</h1><br>
+        <section>
+            <ul style="text-align : center; font-size: small">
+                <a href="/notice">
+                    <li class="li-float">F&A</li>
+                </a>
+                <a href="/board">
+                    <li class="li-float">NEWS</li>
+                </a>
+                <a href="#">
+                    <li class="li-float">게시판</li>
+                </a>
+                <a href="/faq">
+                    <li class="li-float">회원혜택안내</li>
+                </a>
+<!--                <a href="/privateboard">-->
+<!--                    <li class="li-float">1:1문의</li>-->
+<!--                </a>-->
+            </ul>
+            <br>
+        </section>
+
+
+    </section>
+
+
+    <section>
+        <section>
+            <table class="table">
+
+                <form class="d-flex" method="get" action="/board/search" role="search">
+                    <div style="margin-right: 10%; margin-top: 40px; float: right; display: flex">
+                        <input class="form-control me-2" type="text" placeholder="검색" id="search" name="keyword">
+                        <button class="btn btn-primary" type="button">Search</button>
+                    </div>
+                </form>
+
+                <thead>
+                <!-- ★★★ 타임리프 문법에서는 get을 생략하여 사용 -> 예) getTotalElements > totalElements -->
+                <p style="margin: 40px 60px -60px 90px">총 건수: <span th:text="${boards.totalElements}"></span></p>
+                <tr>
+                    <th>No</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>등록일</th>
+                    <th>조회수</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="board : ${boards}">
+                    <td th:text="${board.id}"></td>
+                    <td>
+                        <a th:href="@{|/board/detail/${board.id}|}" th:text="${board.title}"></a>
+                    </td>
+                    <td>작성자</td>
+                    <td th:text="${#temporals.format(board.createdTime, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${#temporals.format(board.updateTime, 'yyyy-MM-dd')}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+
+
+            <div class="col-12 ">
+                <div class="d-grid">
+                    <a style="margin-right: 10%;" href="/board/boardWrite" class="btn btn-lg rounded-0 fs-6">글쓰기</a>
+                </div>
+            </div>
+
+        </section>
+
+        <nav style="text-align: center;">
+            <div class="text-xs-center">
+                <ul class="pagination justify-content-center">
+                    <!-- 이전 -->
+                    <li th:if="${boards.hasPrevious()}">
+                        <a th:href="@{/board(page=${boards.previousPageable().pageNumber})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- 페이지 번호 -->
+                    <!-- th:each 를 사용하기 위해, th:block 을 활용하였다.
+                    <th:block> 내부에 작성된 태그들을 반복시키고자 하지만, 내부 태그들을 묶을 적당한 방법을 HTML에서 제공받을 수 없으므로, 자체적인 <th:block> 태그를 사용한다.-->
+                    <!-- ${#numbers.sequence(from,to,step)} : x에서 y까지 정수 시퀀스 생성 -->
+                    <th:block th:if="${boards.getTotalElements() > 0}"
+                              th:each="i : ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                        <li th:classappend="${boards.pageable.pageNumber== i} ? 'page-item disabled' : 'page-item'">
+                            <a th:href="@{/board(page=${i})}" class="page-link" th:text="${i}"></a>
+                        </li>
+                    </th:block>
+
+                    <!-- 다음 -->
+                    <li th:if="${boards.hasNext()}">
+                        <a th:href="@{/board(page=${boards.nextPageable().pageNumber})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+    </section>
+
+</div>
+
+<footer>
+    <div th:replace="/fragments/footer.html :: footer"></div>
+</footer>
+
+
+<!-- JS includes -->
+
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+
+</body>
+</html>

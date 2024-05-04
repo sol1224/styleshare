@@ -1,0 +1,911 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+</head>
+
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+            $("input[name=cartChkBox]").change(function () {
+                getOrderTotalPrice();
+            });
+        });
+
+        function getOrderTotalPrice() {
+            var orderTotalPrice = 0;
+            var mileage = 0;
+            $("input[name=cartChkBox]:checked").each(function () {
+                var cartItemId = $(this).val();
+                var price = $("#price_" + cartItemId).attr("data-price");
+                var count = $("#count_" + cartItemId).val();
+                orderTotalPrice += price * count;
+                mileage = orderTotalPrice ? Math.floor(orderTotalPrice * 0.01) : 0;
+
+                console.log(price)
+                console.log(orderTotalPrice)
+                console.log(mileage)
+
+            });
+
+            // orderTotalPrice 값을 천 단위 구분 기호가 있는 형식으로 변환
+            // 'ko-KR'은 한국어 로케일
+            var formattedTotalPrice = orderTotalPrice.toLocaleString('ko-KR');
+            var formattedfoMileage = mileage.toLocaleString('ko-KR');
+
+            // 변경된 형식을 요소에 표시
+            $("#orderTotalPrice").html(formattedTotalPrice + '원');
+            $("#formattedfoMileage").html(formattedfoMileage + '원');
+
+            // 배송비 조건 설정
+            var deliveryFee = 3000; // 기본 배송비는 3000원
+            // orderTotalPrice가 100,000원 이상인 경우 배송비를 0원으로 설정
+            if (orderTotalPrice > 100000) {
+                deliveryFee = 0;
+            }
+            // 'ko-KR'은 한국어 로케일
+            var formattedToDeliveryFee = deliveryFee.toLocaleString('ko-KR');
+            var totalAmt = deliveryFee + orderTotalPrice;
+            var formattedToTotalAmt = totalAmt.toLocaleString('ko-KR');
+
+            $("#counterTotdeliveryamt").html(formattedToDeliveryFee);
+            $("#counterTotalAmt").html(formattedToTotalAmt);
+
+
+        }
+
+        function changeCount(obj) {
+
+            if (!obj || !obj.value) {
+                console.error("Invalid object or value in changeCount function");
+                return;
+            }
+            var count = obj.value;
+            var cartItemId = obj.id.split('_')[1];
+            var price = $("#price_" + cartItemId).data("price");
+            var totalPrice = count * price;
+
+            // totalPrice가 있는 경우 mileage를 계산하고 정수로 변환
+            var mileage = totalPrice ? Math.floor(totalPrice * 0.01) : 0;
+            var formattedMileage = mileage.toLocaleString('ko-KR');
+
+            // 'ko-KR'은 한국어 로케일
+            $("#totalPrice_" + cartItemId).html(totalPrice + "원");
+            $("#mileage_" + cartItemId).html(formattedMileage + "원");
+
+            getOrderTotalPrice();
+
+            $('.micro_btn').on('click', function () {
+                console.log(count);
+                console.log(cartItemId);
+                updateCartItemCount(cartItemId, count);
+            });
+
+        }
+
+        function checkAll() {
+            if ($("#checkall").prop("checked")) {
+                $("input[name=cartChkBox]").prop("checked", true);
+            } else {
+                $("input[name=cartChkBox]").prop("checked", false);
+            }
+            getOrderTotalPrice();
+        }
+
+        function updateCartItemCount(cartItemId, count) {
+            // var token = $("meta[name='_csrf']").attr("content");
+            // var header = $("meta[name='_csrf_header']").attr("content");
+
+            if (isNaN(count) || count < 0) {
+                alert("유효하지 않은 수량입니다. 올바른 수량을 입력해주세요.");
+                return;
+            }
+
+            var url = "/cartItem/" + cartItemId + "?count=" + count;
+
+
+            $.ajax({
+                url: url,
+                type: "PATCH",
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    console.log("cartItem count update success");
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+
+                }
+            });
+        }
+
+        function deleteCartItem(obj) {
+
+            var cartItemId = obj.dataset.id;
+            var url = "/cartItem/" + cartItemId;
+            console.log(cartItemId)
+            console.log(cartItemId)
+
+
+            $.ajax({
+                url: url,
+                type: "DELETE",
+                // beforeSend: function (xhr) {
+                //     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                //     xhr.setRequestHeader(header, token);
+                // },
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    location.href = '/cart';
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+
+                }
+            });
+        }
+
+        // 장바구니에서 선택한 상품 주문을 처리
+        function orders() {
+
+            var url = "/cart/orders";
+            var dataList = new Array();
+            var paramData = new Object();
+
+            // 장바구니에서 체크된 장바구니 상품의 아이디 전달 위해
+            // 리스트에 장바구니 상품 아이디를 객체로 만들어 저장
+            $("input[name=cartChkBox]:checked").each(function () {
+                var cartItemId = $(this).val();
+                console.log("cartItemId:", cartItemId);
+                var data = new Object();
+                data["cartItemId"] = cartItemId;
+                dataList.push(data);
+            });
+
+            // 보유 충전금 값 가져오기 (원하는 방식으로 가공하여 전송)
+            var calculationOfAmount = parseFloat($("#calculationOfAmount").text().replace("원", "").replace(",", ""));
+            // 장바구니 상품 아이디와 보유 충전금을 paramData 객체에 추가
+            paramData['cartOrderDtoList'] = dataList;
+            paramData['calculationOfAmount'] = calculationOfAmount;
+            console.log("counterTotalAmt===", counterTotalAmt);
+
+            // 보유 충전금 가져오기
+            var availableBalance = parseFloat($("#calculationOfAmount").text().replace("원", "").replace(",", ""));
+            console.log("availableBalance", availableBalance);
+
+            // 총 결제금액 가져오기
+            var totalAmountText = $("#counterTotalAmt").text();
+            var counterTotalAmt = parseFloat(totalAmountText.replace("원", "").replace(",", ""));
+            console.log("counterTotalAmt", counterTotalAmt);
+
+            // 주문 요청 전에 충전 여부 확인
+            if (availableBalance < counterTotalAmt) {
+                alert("금액이 부족합니다. 충전해주세요.");
+                // 금액 부족 시 처리할 추가적인 로직을 작성하거나, 사용자에게 안내할 수 있습니다.
+                return; // 금액이 부족하면 주문을 진행하지 않고 함수 종료
+            }
+
+
+            var param = JSON.stringify(paramData);
+            console.log("param:", param);
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: param,
+                contentType: "application/json",
+                cache: false,
+                dataType: "json",
+                success: function (result, status) {
+                    alert("주문서로 이동합니다");
+                    location.href = '/orders';
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                            alert(jqXHR.responseJSON.message);
+                        } else {
+                            // 서버에서 오류 응답에 메시지가 없는 경우 대체 처리
+                            alert("선택된 상품이 없습니다");
+                        }
+                    }
+
+                }
+            });
+        }
+    </script>
+</th:block>
+
+<!-- 사용자 스크립트 추가(장바구니 수량변경) -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+// 수량 변경 버튼 클릭 시
+            $('.micro_btn').click(function () {
+// 현재 입력 필드를 찾습니다.
+                const input = $(this).siblings('input[type="number"]');
+
+// 입력된 수량을 가져옵니다.
+                const currentCount = parseInt(input.val());
+
+// `changeCount()` 함수를 호출하여 입력된 수량을 사용하여 가격을 업데이트합니다.
+                changeCount(input[0]);
+            });
+
+// 수량 증가 버튼 클릭 시
+            $('.btn_up').click(function () {
+                const input = $(this).siblings('input[type="number"]');
+                let currentCount = parseInt(input.val());
+                currentCount += 1; // 수량 증가
+                input.val(currentCount);
+
+// 입력된 수량을 사용하여 가격을 업데이트합니다.
+                changeCount(input[0]);
+            });
+
+// 수량 감소 버튼 클릭 시
+            $('.btn_down').click(function () {
+                const input = $(this).siblings('input[type="number"]');
+                let currentCount = parseInt(input.val());
+
+                if (currentCount > 1) {
+                    currentCount -= 1; // 수량 감소
+                    input.val(currentCount);
+
+// 입력된 수량을 사용하여 가격을 업데이트합니다.
+                    changeCount(input[0]);
+                }
+            });
+        });
+    </script>
+</th:block>
+
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            var errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+            bindDomEvent();
+        });
+
+        function bindDomEvent() {
+            $(".custom-file-input").on("change", function () {
+                var fileName = $(this).val().split("\\").pop();  //이미지 파일명
+                var fileExt = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
+
+
+                if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp") {
+                    alert("이미지 파일만 등록이 가능합니다.");
+                    return;
+                }
+
+                $(this).siblings(".custom-file-label").html(fileName);
+            });
+        }
+    </script>
+
+    <script th:inline="javascript">
+        function updateFileName(input) {
+            var fileName = input.files[0].name; // 선택된 파일의 이름 가져오기
+            document.getElementById('fileName').value = fileName; // 파일 이름을 input 요소에 설정
+        }
+    </script>
+</th:block>
+</th:block>
+
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+<div class="culmn">
+    <!--Home page style-->
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+    <style>
+        #counterTotalAmt {
+            color: red;
+            font-weight: 900;
+            font-family: ProximaNova-Bold;
+        }
+
+        .filebox .upload-name {
+            display: inline-block;
+            height: 40px;
+            padding: 0 10px;
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            width: 78%;
+            color: #999999;
+        }
+
+        .filebox label {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            vertical-align: middle;
+            background-color: #999999;
+            cursor: pointer;
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        .filebox input[type="file"] {
+            position: absolute;
+            width: 0;
+            height: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        li {
+            display: inline;
+        }
+
+        .pl:focus {
+            border: 1px solid ghostwhite;
+            box-sizing: border-box;
+            border-radius: 10px;
+            outline: 3px solid ghostwhite;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+        }
+
+        label {
+            margin-right: 40px;
+        }
+
+
+        .reg-title {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        table {
+            width: 100%;
+            border-top: 2px solid #171717;
+            border-bottom: 1px solid #171717;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-bottom: 60px;
+        }
+
+        th, td {
+            border-bottom: 1px solid lightgray;
+            /*padding-top: 16px;*/
+            padding-bottom: -20px;
+        }
+
+        #top_search input {
+            width: 335px;
+            height: 44px;
+            display: block;
+            float: left;
+            border: none;
+            font-size: 14px;
+            line-height: 44px;
+            background: none;
+            padding: 0;
+        }
+
+        .btn_search {
+            width: 30px;
+            height: 30px;
+            margin-left: -1.2em;
+            border: none;
+            line-height: 3.4;
+            /*background-color: rgb(244, 244, 244);*/
+        }
+
+
+        input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+            height: 40px;
+            line-height: 38px;
+            padding-left: 20px;
+            border: none;
+            background-color: #f2f2f2;
+            border: 1px solid #f2f2f2;
+            font-size: 14px;
+            font-family: "ProximaNova-Regular", "Noto Sans KR";
+            outline: none;
+        }
+
+        #top_search:after {
+            content: "";
+            display: flex;
+            width: 360px;
+            height: 1px;
+            background: #000 !important;
+            /*position: absolute;*/
+            bottom: 15px;
+            left: 16px;
+        }
+
+        button, input, optgroup, select, textarea {
+            font: inherit;
+            margin: 0;
+            color: inherit;
+            line-height: 2.4em;
+        }
+
+        input[type="text" i] {
+            writing-mode: horizontal-tb !important;
+            padding-block: 1px;
+            padding-inline: 2px;
+        }
+
+        input {
+            width: 335px;
+            height: 44px;
+            display: block;
+            float: left;
+            border: none;
+            font-size: 14px;
+            line-height: 44px;
+            background: none;
+            padding: 0;
+        }
+
+
+        table tr {
+            height: 60px;
+        }
+
+        table tr, th, td {
+            vertical-align: middle !important;
+        }
+
+        input {
+            padding-left: 6px !important;
+        }
+        .h4-st{
+            font-weight: lighter !important; font-size: 40px; margin-bottom: 20px
+        }
+        .ul-st{
+            margin-top: 10px; margin-bottom: 46px; font-size: smaller
+        }
+        .di-fe{
+            display: inline-flex
+        }
+    </style>
+
+    <body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+
+    <section id="container">
+
+        <div class="shoppingbag">
+
+            <!-- Banner -->
+            <section id="intro" class="main">
+                <h4 class="reg-title h4-st">
+                    장바구니</h4>
+                <ul class="ul-st reg-title">
+                    <li>장바구니</li>
+                    <li>></li>
+                    <li>주문결제</li>
+                    <li>></li>
+                    <li>결제완료</li>
+                </ul>
+            </section>
+            <!--  프로모션 배너 노출// -->
+
+            <div class="mb60 basket_promotion_banner">
+                <a href="/BenefitInfo?memberBenefit=4" target="_self" class="center-block">
+                    <img src="//image.wconcept.co.kr/images/builder/1/4/138/318/pc_1240x100_20221212095117_20230926164822_20240131152749.jpg">
+                </a>
+            </div>
+            <!--  프로모션 배너 노출// -->
+            <form method="post">
+                <div class="bag_wrap">
+                    <div class="bag_cont">
+                        <h3 class="tit first_title">쇼핑백 상품 (<span
+                                style="font-family: ProximaNova-Bold; font-weight: 900"
+                                th:text="${cartItems.size}"></span>)</span></h3>
+                        <table class="cols tbl_product">
+
+                            <colgroup>
+                                <col style="width: 20px;">
+                                <col>
+                                <col style="width: 80px;">
+                                <col style="width: 150px;">
+                                <col style="width: 150px;">
+                                <col style="width: 130px;">
+                                <col style="width: 30px;">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <!--                                <input type="checkbox" id="checkall" class="input_button small square" onclick="checkAll()">-->
+                                </th>
+                                <th>상품정보</th>
+                                <th>수량</th>
+                                <th>가격</th>
+                                <th>마일리지</th>
+                                <th colspan="2">총금액</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="cartItem : ${cartItems}">
+                                <!--                            <td colspan="7" style="text-align:center;"><p>쇼핑백에 담긴 상품이 없습니다.-->
+                                <!--                                <p></td>-->
+
+                                <td style="position: relative;"><span style="vertical-align: -webkit-baseline-middle;"
+                                                                      class="input_button small square">
+                                <input style="position: relative;" type="checkbox" name="cartChkBox"
+                                       class="check_all input_button small square"
+                                       th:value="${cartItem.cartItemId}"/><label
+                                        th:value="${cartItem.cartItemId}" onclick="checkAll()"></label></span>
+
+                                    <button type="button" class="close" aria-label="Close">
+                                    <span aria-hidden="true" th:data-id="${cartItem.cartItemId}"
+                                          onclick="deleteCartItem(this)">&times;</span>
+
+                                    </button>
+                                </td>
+
+                                <td style="display: inline-flex" class="vertical-center">
+                                    <a th:href="@{|/new/detail/${cartItem.cartItemId}|}">
+                                        <img style="margin-left: 30px;" th:src="${cartItem.imgStr}"
+                                             class="rounded repImg" th:alt="${cartItem.name}">
+                                        <div style="position: relative; width:240px; height: 80px; align-content: center;text-align: left; float: left;"
+                                             th:id="'name' + ${cartItem.cartItemId}"
+                                             th:data-name="${cartItem.name}"
+                                             th:text="${cartItem.name}" class="align-self-center mr-2">
+                                        </div>
+                                    </a>
+                                </td>
+                                <td><input type="hidden" name="limitCount" class="limitCount" value="0"/>
+                                    <input type="hidden" name="orderedCnt" class="orderedCnt" value="0"/>
+                                    <input type="hidden" class="itemNameInfo"
+                                           value="Leoni pintuck skirt &#xB808;&#xC624;&#xB2C8; &#xD540;&#xD131; &#xC2A4;&#xCEE4;&#xD2B8;"/>
+
+
+                                    <div class="each">
+                                        <button type="button" name="button" class="btn_up btn_plus">수량올림</button>
+                                        <input type="number" name="count" th:id="'count_' + ${cartItem.cartItemId}"
+                                               th:value="${cartItem.count}" min="1"
+                                               onchange="changeCount(this)" class="form-control mr-2">
+                                        <button type="button" name="button" class="btn_down btn_minus">수량내림</button>
+                                    </div>
+
+                                    <button type="button" name="button" id="qtybutton_204140141" style="color:black"
+                                            class="micro_btn btn_each" onclick="changeCount(this)">변경
+                                    </button>
+
+                                </td>
+
+                                <td> <span th:id="'price_' + ${cartItem.cartItemId}"
+                                           th:data-price="${cartItem.price}"
+                                           th:text="${cartItem.price != null ? (#numbers.formatInteger(cartItem.price, 3, 'COMMA') + '원') : '0원'}"
+                                           class="align-self-center mr-2">
+                                    </span></td>
+
+                                <td>
+                            <span th:id="'mileage_' + ${cartItem.cartItemId}"
+                                  name="totalPrice"
+                                  th:text="${cartItem.price != null && cartItem.count != null ? (#numbers.formatInteger(cartItem.price * cartItem.count * 0.01, 3, 'COMMA') + '원') : '0원'}">
+                            </span>
+                                </td>
+                                <td colspan="2"><span th:id="'totalPrice_' + ${cartItem.cartItemId}"
+                                                      name="totalPrice"
+                                                      th:text="${#numbers.formatInteger(cartItem.price * cartItem.count, 3, 'COMMA') + '원'}"></span>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- 기능 추가작업 필요 -->
+                        <!--                    <div class="tbl_under_box" th:each="cartItem : ${cartItems} ">-->
+                        <div class="tbl_under_box">
+                            <div class="bx_btn di-fe">
+                            </div>
+                            <div class="shoppingbag_count_limit_notify">
+                                <ul class="unorder_list">
+
+                                    <p name="deliveryFee" style="font-size: 14px">배송비 3,000원 | 총 100,000원 이상인 경우
+                                        무료배송</p>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="payment">
+                        <div class="bx_total">
+                            <ul th:object="${member}">
+                                <li>
+                                    <strong>총 상품 금액</strong>
+                                    <span id="orderTotalPrice" class="text-danger"></span>
+                                </li>
+                                <li>
+                                    <strong>배송비</strong>
+                                    <p><span>+</span><em id="counterTotdeliveryamt">0</em>원</p>
+                                </li>
+                                <li class="total">
+                                    <strong>총 결제금액</strong>
+                                    <p><em id="counterTotalAmt" name="counterTotalAmt" th:field="counterTotalAmt">0</em>원
+                                    </p>
+                                </li>
+                                <li class="point">
+                                    <strong>적립예정 포인트</strong>
+                                    <p><em id="formattedfoMileage">0</em></p>
+                                </li>
+                                <li class="total">
+                                    <strong style="color: black">보유 충전금</strong>
+                                    <p id="calculationOfAmount" name="calculationOfAmount" type="hidden"
+                                       th:field="calculationOfAmount" style="color: black"
+                                       th:text="${member.money != null && member.money != null ? (#numbers.formatInteger(member.money, 3, 'COMMA') + '원') : '0원'}">
+                                        0원</p>
+                                </li>
+                                <li class="point">
+                                    <strong><a onclick="useMoney()"><u>사용하기</u></a></strong>
+                                </li>
+                            </ul>
+
+
+                            <button type="button" name="button"
+                                    onclick="orders()"
+                                    class="btn_order">선택상품 주문하기
+                            </button>
+
+                            <button type="button"
+                                    class="btn_gift_selected" th:href="@{/women}">메인으로
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div id="buyitwith" data-itemcd=""></div>
+        </div>
+    </section>
+
+
+    </section>
+    </body>
+
+    <footer>
+        <div th:replace="/fragments/footer.html :: footer"></div>
+    </footer>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script th:inline="javascript">
+
+    // '사용하기' 링크를 클릭했을 때 실행되는 함수
+    function useMoney() {
+        var memberMoney = [[${member.money}]];  // Thymeleaf 템플릿 엔진을 통해 서버에서 가져온 변수
+
+        // 총 결제금액(counterTotalAmt)을 가져옴
+        var totalAmountText = document.getElementById('counterTotalAmt').innerText; // "0원" 형식의 텍스트
+        // 총 결제금액(counterTotalAmt)을 가져옴
+        var totalAmount = parseInt(document.getElementById('counterTotalAmt').innerText.replace(/[^0-9]/g, ''), 10);
+
+
+        // 보유 충전금(memberMoney)과 총 결제금액(totalAmount) 비교
+        if (memberMoney >= totalAmount) {
+            // 충전금이 결제금액보다 큰 경우 새 창 열기
+            var screenWidth = window.screen.width;
+            var screenHeight = window.screen.height;
+            var windowWidth = 700;
+            var windowHeight = 600;
+
+            var left = (screenWidth - windowWidth) / 2;
+            var top = (screenHeight - windowHeight) / 2;
+
+            var newWindow = window.open('', '_blank', 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + left + ',top=' + top);
+
+            // CSS 스타일 추가
+            var style = document.createElement('style');
+            style.textContent = `
+            body {
+                font-family: 'ProximaNova-regular';
+                text-align: center; /* 모든 요소를 가운데 정렬 */
+            }
+            .btn-container {
+                display: flex;
+                justify-content: center;
+            }
+            .btn {
+                font-size: 16px;
+                line-height: normal;
+                margin: 5px;
+                width: 160px;
+                height: 50px;
+                background-color: black;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+            .mileage-info {
+                font-size: 20px;
+                text-align: center;
+                margin-top: 20px;
+                margin-bottom: -16px;
+                font-weight: 700;
+                font-family: ProximaNova-bold;
+            }
+            .mileage-info2 {
+                font-size: 16px;
+                text-align: center;
+                margin-top: 20px;
+                font-family: ProximaNova-regular;
+            }
+            h1, h3, p, button {
+            margin: 20px auto; /* 가운데 정렬을 위한 마진 */
+            }
+            button.btn.black {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            }
+
+            div {
+            width:100%;
+            `;
+            newWindow.document.head.appendChild(style);
+
+            // 결제금액 표시
+            var totalAmountHeader = document.createElement('h1');
+            totalAmountHeader.textContent = '결제하기';
+            newWindow.document.body.appendChild(totalAmountHeader);
+
+            // 첫 번째 div 생성: 총 결제금액
+            var totalAmountContainer1 = document.createElement('div');
+            totalAmountContainer1.style.width = '360px'; // 너비 300px 설정
+            totalAmountContainer1.style.fontSize = '16px';
+            totalAmountContainer1.style.margin = '20px auto'; // 가운데 정렬을 위한 마진
+            totalAmountContainer1.style.display = 'flex'; // block 요소로 설정
+
+            // '총 결제금액' 헤더 생성 및 추가
+            var totalAmountHeader1 = document.createElement('div');
+            totalAmountHeader1.textContent = '총 결제금액';
+            totalAmountHeader1.style.fontSize = '16px';
+            totalAmountHeader1.style.textAlign = 'left'; // 왼쪽 정렬
+            totalAmountContainer1.appendChild(totalAmountHeader1);
+
+// 금액을 표시하는 p 요소 생성 및 스타일 적용
+            var totalAmountTextElement1 = document.createElement('div');
+            totalAmountTextElement1.style.textAlign = 'right'; // 오른쪽 정렬
+            totalAmountTextElement1.style.fontSize = '16px';
+            totalAmountTextElement1.innerHTML = totalAmountText + "원"; // "0원" 형식을 그대로 표시
+            totalAmountContainer1.appendChild(totalAmountTextElement1);
+
+// 생성된 첫 번째 div를 새 윈도우의 body에 추가
+            newWindow.document.body.appendChild(totalAmountContainer1);
+
+// 두 번째 div 생성: 결제일시
+            var totalAmountContainer2 = document.createElement('div');
+            totalAmountContainer2.style.width = '360px'; // 너비 300px 설정
+            totalAmountContainer2.style.fontSize = '16px';
+            totalAmountContainer2.style.margin = '20px auto'; // 가운데 정렬을 위한 마진
+            totalAmountContainer2.style.display = 'flex'; // block 요소로 설정
+
+// '결제일시' 헤더 생성 및 추가
+            var totalAmountHeader2 = document.createElement('div');
+            totalAmountHeader2.textContent = '결제일시';
+            totalAmountHeader2.style.fontSize = '16px';
+            totalAmountHeader2.style.textAlign = 'left'; // 왼쪽 정렬
+            totalAmountContainer2.appendChild(totalAmountHeader2);
+
+// 결제일시를 표시하는 p 요소 생성 및 스타일 적용
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = ('0' + (today.getMonth() + 1)).slice(-2);
+            var day = ('0' + today.getDate()).slice(-2);
+            var dateString = year + '-' + month + '-' + day;
+            var hours = ('0' + today.getHours()).slice(-2);
+            var minutes = ('0' + today.getMinutes()).slice(-2);
+            var seconds = ('0' + today.getSeconds()).slice(-2);
+            var timeString = hours + ':' + minutes + ':' + seconds;
+
+            var totalAmountTextElement2 = document.createElement('div');
+            totalAmountTextElement2.style.textAlign = 'right'; // 오른쪽 정렬
+            totalAmountTextElement2.style.fontSize = '20px';
+            totalAmountTextElement2.innerHTML = dateString + timeString;
+            totalAmountContainer2.appendChild(totalAmountTextElement2);
+
+// 생성된 두 번째 div를 새 윈도우의 body에 추가
+            newWindow.document.body.appendChild(totalAmountContainer2);
+
+            var totalAmountHeader = document.createElement('h3');
+            totalAmountHeader.textContent = '결제를 원하시면 확인버튼을 눌러주세요';
+            newWindow.document.body.appendChild(totalAmountHeader);
+
+
+            // 확인 버튼 추가
+            var confirmButton = document.createElement('button');
+            confirmButton.textContent = '확인';
+            confirmButton.className = 'btn black';
+            confirmButton.onclick = function () {
+                if (memberMoney >= totalAmount) {
+                    if (memberMoney >= totalAmount) {
+                        var newMoney = memberMoney - totalAmount; // Calculate remaining money after deduction
+                        document.querySelector('#calculationOfAmount').innerText = newMoney.toLocaleString() + '원';
+
+                        // Set totalAmountText to 0원 after successful payment
+                        document.getElementById('counterTotalAmt').innerText = '0';
+                        // 총 결제금액(counterTotalAmt)을 가져옴
+                        var totalAmountTextDone = document.getElementById('counterTotalAmt').innerText;
+                        console.log("totalAmountTextDone", totalAmountTextDone);
+
+                        var paramData = {newMoney: newMoney};
+                        var money = JSON.stringify(paramData);
+                        console.log("money:", money);
+
+                        // Close the new window
+                        newWindow.close();
+                    }
+                }
+                ;
+
+            };
+            newWindow.document.body.appendChild(confirmButton);
+
+        } else {
+            alert('금액이 부족합니다.');
+        }
+    }
+</script>
+<!-- JS includes -->
+
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+    <style>
+        .btn_search {
+            width: 30px;
+            height: 30px;
+            margin-left: -1.2em;
+            border: none;
+            line-height: 3.4;
+            /*background-color: rgb(244, 244, 244);*/
+        }
+
+        input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+            height: 40px;
+            line-height: 38px;
+            padding-left: 20px;
+            border: none;
+            background-color: #f2f2f2;
+            border: 1px solid #f2f2f2;
+            font-size: 14px;
+            font-family: "ProximaNova-Regular", "Noto Sans KR";
+            outline: none;
+        }
+
+        .overlaybox {
+            position: relative;
+            width: 360px;
+            height: 350px;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/box_movie.png') no-repeat;
+            padding: 15px 10px;
+        }
+
+        .overlaybox div, ul {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .overlaybox li {
+            list-style: none;
+        }
+
+        .overlaybox .boxtitle {
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png') no-repeat right 120px center;
+            margin-bottom: 8px;
+        }
+
+        .overlaybox .first {
+            position: relative;
+            width: 247px;
+            height: 136px;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumb.png') no-repeat;
+            margin-bottom: 8px;
+        }
+
+        .first .text {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .first .triangle {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            top: 0;
+            left: 0;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/triangle.png') no-repeat;
+            padding: 6px;
+            font-size: 18px;
+        }
+
+        .first .movietitle {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            background: floralwhite;
+            padding: 7px 15px;
+            font-size: 14px;
+        }
+
+        .overlaybox ul {
+            width: 247px;
+        }
+
+        .overlaybox li {
+            position: relative;
+            margin-bottom: 2px;
+            background: floralwhite;
+            padding: 5px 10px;
+            color: #aaabaf;
+            line-height: 1;
+        }
+
+        .overlaybox li span {
+            display: inline-block;
+        }
+
+        .overlaybox li .number {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .overlaybox li .title {
+            font-size: 13px;
+        }
+
+        .overlaybox ul .arrow {
+            position: absolute;
+            margin-top: 8px;
+            right: 25px;
+            width: 5px;
+            height: 3px;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/updown.png') no-repeat;
+        }
+
+        .overlaybox li .up {
+            background-position: 0 -40px;
+        }
+
+        .overlaybox li .down {
+            background-position: 0 -60px;
+        }
+
+        .overlaybox li .count {
+            position: absolute;
+            margin-top: 5px;
+            right: 15px;
+            font-size: 10px;
+        }
+
+        .overlaybox li:hover {
+            color: #fff;
+            background: #d24545;
+        }
+
+        .overlaybox li:hover .up {
+            background-position: 0 0px;
+        }
+
+        .overlaybox li:hover .down {
+            background-position: 0 -20px;
+        }
+
+        .star-ratings {
+            color: #aaa9a9;
+            position: relative;
+            unicode-bidi: bidi-override;
+            width: max-content;
+            -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+            -webkit-text-stroke-width: 0.5px;
+            -webkit-text-stroke-color: #2b2a29;
+        }
+
+        .star-ratings-fill {
+            color: #fff58c;
+            padding: 0;
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            -webkit-text-fill-color: gold;
+        }
+
+        .star-ratings-base {
+            z-index: 0;
+            padding: 0;
+        }
+
+        .container2 {
+            overflow: hidden; /* 부모 요소에 오버플로우 숨김 설정 */
+        }
+
+        .box {
+            float: left; /* 왼쪽으로 부유 설정 */
+        }
+
+        #top_search input {
+            width: 335px;
+            height: 44px;
+            display: block;
+            float: left;
+            border: none;
+            font-size: 14px;
+            line-height: 44px;
+            background: none;
+            padding: 0;
+        }
+
+        input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+            height: 40px;
+            line-height: 38px;
+            padding-left: 20px;
+            border: none;
+            background-color: #f2f2f2;
+            border: 1px solid #f2f2f2;
+            font-size: 14px;
+            font-family: "ProximaNova-Regular", "Noto Sans KR";
+            outline: none;
+        }
+
+        #top_search:after {
+            content: "";
+            display: flex;
+            width: 360px;
+            height: 1px;
+            background: #000 !important;
+            /*position: absolute;*/
+            bottom: 15px;
+            left: 16px;
+        }
+
+        button, input, optgroup, select, textarea {
+            font: inherit;
+            margin: 0;
+            color: inherit;
+            line-height: 2.4em;
+        }
+
+        input[type="text" i] {
+            writing-mode: horizontal-tb !important;
+            padding-block: 1px;
+            padding-inline: 2px;
+        }
+
+        input {
+            width: 335px;
+            height: 44px;
+            display: block;
+            float: left;
+            border: none;
+            font-size: 14px;
+            line-height: 44px;
+            background: none;
+            padding: 0;
+        }
+
+        table tr {
+            height: 60px;
+        }
+
+        table tr, th, td {
+            vertical-align: middle !important;
+        }
+
+        /**
+        지도 화면비율 100%
+        position: absolute;: 이 부분은 요소의 위치를 절대 위치로 설정.
+        절대 위치를 사용하면 해당 요소가 다른 요소와 겹치지 않고 자유롭게 위치할 수 있음
+         */
+        #map {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+<div class="culmn">
+    <!--Home page style-->
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+    <div id="map" style="width:100%; "></div>
+
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=815055c6971c63ed8a26eee958161a12"></script>
+    <script th:inline="javascript" charset="UTF-8">
+
+
+        var mapContainer = document.getElementById('map'),
+            mapOption = {
+                center: new kakao.maps.LatLng(37.514623, 126.937437),
+                level: 7
+            };
+
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        var mapList = [[${mapList}]];
+        var position = [];
+        var infowindows = []; // 모든 인포윈도우를 저장하기 위한 배열
+
+        for (var i = 0; i < mapList.length; i++) {
+            position.push({
+                title: mapList[i].name,
+                content: mapList[i].description,
+                latlng: new kakao.maps.LatLng(parseFloat(mapList[i].xcoord), parseFloat(mapList[i].ycoord))
+            });
+        }
+
+        var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+        for (var i = 0; i < position.length; i++) {
+            var imageSize = new kakao.maps.Size(24, 35);
+            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: position[i].latlng,
+                title: position[i].title,
+                image: markerImage
+            });
+
+
+            var infowindow = new kakao.maps.InfoWindow({
+                content: '<div class="overlaybox container2" style="padding:14px; font-size:14px; ' +
+                    'height: auto; width: auto; margin: -5px -5px 0 -10px; height: 92px; ' +
+                    'width: 400px; border-radius: 20px; border: none; outline: solid white 3px; background: white;">' +
+                    '<div class="box" style="margin-right: 10px"><b>' + mapList[i].name + '</b></div>' +
+                    '<div class="star-ratings box">' +
+                    '<div class="star-ratings-fill space-x-2 text-lg" style="width: ' + ratingToPercent(mapList[i].review) + '%;">' +
+                    '<span>★</span>' + '<span>★</span>' + '<span>★</span>' + '<span>★</span>' + '<span>★</span>' +
+                    '</div>' +
+                    '<div class="star-ratings-base space-x-2 text-lg">' +
+                    '<span>★</span>' + '<span>★</span>' + '<span>★</span>' + '<span>★</span>' + '<span>★</span>'
+                    + '</div>' +
+                    '</div>' + '<br>' + mapList[i].address1 +
+                    '<br>' + '<a href="' + mapList[i].detailaddress + '">' + mapList[i].detailaddress + '</a>' +
+                    '</div>',
+            });
+
+            // ratingToPercent 함수 정의
+            function ratingToPercent(review) {
+                // 별점 범위가 1에서 5로 가정
+                return (review / 5) * 100;
+            }
+
+            infowindows.push(infowindow); // 배열에 인포윈도우 추가
+
+            // 클릭 이벤트 처리
+            kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
+        }
+
+        // 지도를 클릭했을 때 모든 인포윈도우를 닫는 이벤트 처리
+        kakao.maps.event.addListener(map, 'click', function () {
+            for (var i = 0; i < infowindows.length; i++) {
+                infowindows[i].close();
+            }
+        });
+
+
+        function makeClickListener(map, marker, infowindow) {
+            return function () {
+                // 모든 인포윈도우를 닫음
+                for (var i = 0; i < infowindows.length; i++) {
+                    infowindows[i].close();
+                }
+                // 선택한 마커의 인포윈도우를 엶
+                infowindow.open(map, marker);
+            };
+        }
+    </script>
+</div>
+
+
+<footer>
+    <div th:replace="/fragments/footer.html :: footer"></div>
+</footer>
+
+<!-- JS includes -->
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

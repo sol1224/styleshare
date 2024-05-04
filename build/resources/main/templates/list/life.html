@@ -1,0 +1,503 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="reset.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+</head>
+<style>
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+
+    table tr {
+        height: 60px;
+    }
+
+
+    table tr, th, td {
+        vertical-align: middle !important;
+    }
+
+
+    .mr-b-40 {
+        margin-bottom: 40px;
+    }
+
+    .h5-font {
+        font-weight: normal !important;
+        font-size: 30px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+
+    select {
+        display: none;
+    }
+
+
+    .img-resize {
+        width: 454px;
+        height: 580px;
+    }
+
+    .li-resize {
+        width: 454px;
+        padding: 10px;
+        height: 600px;
+        /*margin: 0 auto;*/
+    }
+
+    .font-sm {
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .font-title {
+        font-size: 14px;
+        font-family: ProximaNova-Semibold !important;
+        font-weight: 700;
+        text-align: left;
+    }
+
+
+    .custom-select {
+        /*display: inline-block;*/
+        width: 100px;
+        height: 48px;
+        /*border: solid 1px #c4ccd8;*/
+        background-color: #ffffff;
+        box-sizing: border-box;
+        font-size: 12px;
+        cursor: pointer;
+        position: relative;
+        outline: 0px;
+    }
+
+    .custom-select-list {
+        position: absolute;
+        font-size: 12px;
+        width: 160px;
+        height: 162px;
+        z-index: 15;
+        border: solid 1px #c4ccd8;
+        background-color: #ffffff;
+        text-align: left;
+        margin-top: -3px;
+        box-sizing: border-box;
+    }
+
+    .select-origin {
+        position: absolute;
+        right: 10px;
+    }
+
+    .custom-select-text {
+        position: absolute;
+        top: 14px;
+        left: 15px;
+        font-size: 12px;
+        font-family: ProximaNova-Light !important;
+        font-weight: lighter;
+    }
+
+    .custom-select-arrow {
+        position: absolute;
+        top: 17px;
+        /*right: 15px;*/
+        width: 14px;
+        height: 14px;
+    }
+
+
+    .custom-select-option {
+        height: 48px;
+        line-height: 48px;
+        padding-left: 15px;
+        cursor: pointer;
+        box-sizing: border-box;
+        padding-bottom: -20px;
+    }
+
+    .custom-select-option:hover {
+        /*color: #ffffff;*/
+        /*background-color: #1172c4;*/
+        box-sizing: border-box;
+    }
+
+    .di-flex {
+        display: inline-flex;
+        border-top: 1px solid #eee;
+        width: 1350px
+    }
+
+    .li-margin {
+        margin-bottom: -20px !important;
+    }
+
+
+    .flex-in-block {
+        display: inline-flex;
+        /*float: left;*/
+    }
+
+
+    .mr-right {
+        margin-right: 0 !important;
+    }
+
+    .price-st {
+        float: left;
+        font-size: 16px;
+        font-family: ProximaNova-Bold !important;
+    }
+
+    .dis-st {
+        float: right;
+        font-size: 16px;
+        font-family: ProximaNova-Bold !important;
+        color: #FA5500
+    }
+
+    .ro-st2 {
+        position: relative;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .ro-st {
+        position: relative;
+        height: auto;
+        margin: 0 auto;
+        padding-top: 220px
+    }
+
+    .di-none {
+        display: none;
+    }
+
+    .di-sty {
+        width: 100%;
+        padding-top: 18px;
+    }
+
+    .h6-st {
+        float: right;
+        font-size: 13px !important;
+    }
+
+    .wi-100 {
+        width: 100%;
+    }
+
+    .st-10 {
+        margin-top: 10px
+    }
+
+    .ma-st {
+        margin: 0 auto;
+        width: 1362px;
+    }
+
+    .di-st-2 {
+        display: inline-block;
+        float: left;
+    }
+
+    .mg-60 {
+        margin-top: -60px;
+    }
+
+    .pag-st {
+        text-align: center;
+        color: black;
+        margin-top: 80px
+    }
+</style>
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+<div class="culmn">
+    <!--Home page style-->
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+
+    <div class="row ro-st">
+        <div class="main_features fix roomy-70 wrapper">
+            <div class="text-center">
+                <h3 class="h5-font mr-b-40">라이프</h3>
+            </div>
+        </div>
+    </div>
+
+
+    <section id="features" class="features bg-white center">
+        <div>
+            <div class="row ro-st2">
+                <div class="main_features fix wrapper">
+
+
+                    <!-- 셀렉트박스 -->
+                    <section class="di-flex">
+                        <div>
+                            <div class="custom-select" tabindex="0">
+                                <span class="custom-select-text">가격</span>
+                                <img src="/assets/images/arrow.png" class="custom-select-arrow">
+                            </div>
+                            <ul class="custom-select-list di-none">
+                                <li value="selectOption1" class="custom-select-option li-margin">50,000원 이하</li>
+                                <li value="selectOption2" class="custom-select-option li-margin">50,000원 ~
+                                    100,000원
+                                </li>
+                                <li value="selectOption3" class="custom-select-option li-margin">100,000원 ~
+                                    150,000원
+                                </li>
+                                <li value="selectOption4" class="custom-select-option li-margin">150,000원 ~
+                                    200,000원
+                                </li>
+                                <li value="selectOption5" class="custom-select-option li-margin">200,000원 이상</li>
+                            </ul>
+                            <select class="select-origin">
+                                <option value="selectOption1" selected="selected">선택 옵션1</option>
+                                <option value="selectOption2">선택 옵션2</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <div class="custom-select" tabindex="0">
+                                <span class="custom-select-text">정렬</span>
+                                <img src="/assets/images/arrow.png" class="custom-select-arrow">
+                            </div>
+                            <ul class="custom-select-list di-none">
+                                <li value="selectOption1" class="custom-select-option li-margin">신상순</li>
+                                <li value="selectOption2" class="custom-select-option li-margin">판매순</li>
+                                <li value="selectOption3" class="custom-select-option li-margin">높은가격순</li>
+                                <li value="selectOption4" class="custom-select-option li-margin">낮은가격순</li>
+                                <li value="selectOption5" class="custom-select-option li-margin">조회수높은순</li>
+                            </ul>
+                            <select class="select-origin">
+                                <option value="selectOption1" selected="selected">선택 옵션1</option>
+                                <option value="selectOption2">선택 옵션2</option>
+                            </select>
+                        </div>
+
+                        <div class="di-sty">
+                            <h6 class="h6-st"
+                                th:text="${lifes != null and lifes.totalElements > 0 ? '총' + lifes.totalElements + '개' : '총0개'}"></h6>
+                        </div>
+
+                    </section>
+
+
+                    <section class="wi-100">
+                        <div class="main_features fix ma-st">
+                            <ul class="flex-in-block di-st-2" th:each="wi: ${lifes}">
+                                <li class="mr-right li-resize width-fix grid-item post-transition metal numberGreaterThan50">
+                                    <a th:href="@{|/life/detail/${wi.id}|}"><img class="img-resize"
+                                                                                 th:src="${wi.imgStr}"></a>
+                                    <div class="mg-60">
+                                        <p class="font-title" th:text="${wi.brand}">SUNGBOON EDITOR</p>
+                                        <p class="font-sm" th:text="${wi.name}">[24매] 딥 콜라겐 마스크팩(6BOX)</p>
+                                    </div>
+                                    <div class="st-10">
+                                        <p class="price-st"
+                                           th:text="${#numbers.formatInteger(wi.price, 3, 'COMMA') + '원'}">
+                                            24,500원</p>
+                                        <p class="dis-st" th:text="|${wi.discount}%|">45%</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</section>
+
+
+<!--=================페이징 처리=================-->
+<nav class="pag-st">
+    <div class="text-xs-center">
+        <ul class="pagination justify-content-center first" id="pagination">
+            <!-- 이전 -->
+            <li th:if="${lifes != null and lifes.hasPrevious()}">
+                <a th:href="@{/life(page=${lifes.previousPageable().pageNumber})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- 페이지 번호 -->
+            <th:block th:if="${lifes != null}">
+                <th:block th:each="i : ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                    <li>
+                        <!-- 카테고리에 따라 동적으로 href 변경 -->
+                        <a class="pageNumber"
+                           th:href="@{'/life'(page=${i})}"
+                           th:text="${i}"
+                           th:classappend="${currentPage == i} ? 'active' : ''">
+                        </a>
+                    </li>
+                </th:block>
+            </th:block>
+
+
+            <!-- 다음 -->
+            <li th:if="${lifes != null and lifes.hasNext()}">
+                <a th:href="@{/life(page=${currentPage + 2})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+</div>
+
+
+<script>
+    // 모든 'custom-select-option' 클래스의 요소를 선택합니다.
+    const options = document.querySelectorAll('.custom-select-option');
+
+    // 각 요소에 대해 클릭 이벤트 리스너를 추가합니다.
+    options.forEach(option => {
+        option.addEventListener('click', function () {
+            // 클릭된 요소의 'value' 속성을 추출합니다.
+            const value = option.getAttribute('value');
+
+            // 추출한 'value'를 서버로 전달하는 GET 요청을 수행합니다.
+            // '/men/select' 경로에 value 파라미터를 포함시킵니다.
+            const url = `/life/select?value=${value}`;
+
+            // window.location.href를 사용하여 지정된 URL로 페이지를 이동합니다.
+            window.location.href = url;
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.custom-select').on('click', function () {
+            $(this).toggleClass('selected');
+            $('.custom-select-list').hide();
+            $(this).next('.custom-select-list').toggle();
+        });
+
+        $('.custom-select-option').on('click', function () {
+            let value = $(this).attr('value');
+            let selectList = $(this).closest('.custom-select-list');
+            let selectText = "가격";
+            let selectOrigin = selectList.next('.select-origin');
+
+            // selectText.text($(this).text());
+            selectOrigin.val(value);
+            selectList.hide();
+        });
+    });
+
+    // 옵션 리스트 외 다른 곳 클릭 시 숨기기
+    $(document).on('click', function (event) {
+        if (!$(event.target).closest('.custom-select').length) {
+            $('.custom-select-list').hide();
+            $('.custom-select').removeClass('selected');
+        }
+    });
+</script>
+</body>
+
+<footer>
+    <div th:replace="/fragments/footer.html :: footer"></div>
+</footer>
+
+
+</div>
+
+
+<!-- JS includes -->
+
+<script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+<script src="/assets/js/jquery.easing.1.3.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/js.isotope.js"></script>
+<script src="/assets/js/jquery.collapse.js"></script>
+<script src="/assets/js/bootsnav.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+
+</body>
+</html>

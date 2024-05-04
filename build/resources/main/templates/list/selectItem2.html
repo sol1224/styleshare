@@ -1,0 +1,542 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="reset.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div th:replace="/fragments/header.html :: headFragment"></div>
+</head>
+<style>
+    #top_search input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .btn_search {
+        width: 30px;
+        height: 30px;
+        margin-left: -1.2em;
+        border: none;
+        line-height: 3.4;
+        /*background-color: rgb(244, 244, 244);*/
+    }
+
+    .mr-b-20 {
+        margin-bottom: 20px;
+    }
+
+    .font-700 {
+        font-weight: 700 !important;
+    }
+
+    input[type=text], textarea, input[type=password], input[type=tel], input[type=number] {
+        height: 40px;
+        line-height: 38px;
+        padding-left: 20px;
+        border: none;
+        background-color: #f2f2f2;
+        border: 1px solid #f2f2f2;
+        font-size: 14px;
+        font-family: "ProximaNova-Regular", "Noto Sans KR";
+        outline: none;
+    }
+
+    #top_search:after {
+        content: "";
+        display: flex;
+        width: 360px;
+        height: 1px;
+        background: #000 !important;
+        /*position: absolute;*/
+        bottom: 15px;
+        left: 16px;
+    }
+
+    button, input, optgroup, select, textarea {
+        font: inherit;
+        margin: 0;
+        color: inherit;
+        line-height: 2.4em;
+    }
+
+    input[type="text" i] {
+        writing-mode: horizontal-tb !important;
+        padding-block: 1px;
+        padding-inline: 2px;
+    }
+
+    input {
+        width: 335px;
+        height: 44px;
+        display: block;
+        float: left;
+        border: none;
+        font-size: 14px;
+        line-height: 44px;
+        background: none;
+        padding: 0;
+    }
+
+    .h3-font {
+        font-weight: normal !important;
+        font-size: 48px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+    table tr {
+        height: 60px;
+    }
+
+    .li-float {
+        font-size: 15px;
+        font-weight: 500;
+        /*font-family: ProximaNova-Bold !important;*/
+        color: #555555;
+        margin: 28px 40px 0 40px;
+    }
+
+    table tr, th, td {
+        vertical-align: middle !important;
+    }
+
+    .m200 {
+        margin-top: 200px;
+        margin-bottom: 200px;
+    }
+
+    .h3-font {
+        font-weight: normal !important;
+        font-size: 48px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+    .h5-font {
+        font-weight: normal !important;
+        font-size: 30px;
+        letter-spacing: -2px;
+        text-align: center;
+    }
+
+    .float-left-50 {
+        float: left;
+        width: 50%;
+    }
+
+    .float-right-50 {
+        float: right;
+        width: 50%;
+    }
+
+    .ul-inline {
+        display: inline-flex;
+        height: 260px;
+    }
+
+    .mg-r-20 {
+        margin-right: 20px;
+    }
+
+    select {
+        display: none;
+    }
+
+    .ul-fl {
+        display: flex;
+        padding-left: 30px;
+        /*margin-bottom: 12%;*/
+        /*flex: 1;*/
+    }
+
+    .img-resize {
+        width: 454px;
+        height: 600px;
+    }
+
+    .li-resize {
+        width: 454px;
+        padding: 10px;
+        height: 780px;
+        /*margin: 0 auto;*/
+    }
+
+    .font-sm {
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .font-title {
+        font-size: 14px;
+        font-family: ProximaNova-Semibold !important;
+        font-weight: 700;
+        text-align: left;
+    }
+
+
+    .custom-select {
+        /*display: inline-block;*/
+        width: 100px;
+        height: 48px;
+        /*border: solid 1px #c4ccd8;*/
+        background-color: #ffffff;
+        box-sizing: border-box;
+        font-size: 12px;
+        cursor: pointer;
+        position: relative;
+        outline: 0px;
+    }
+
+    .custom-select-list {
+        position: absolute;
+        font-size: 12px;
+        width: 160px;
+        height: 134px;
+        z-index: 15;
+        border: solid 1px #c4ccd8;
+        background-color: #ffffff;
+        text-align: left;
+        margin-top: -3px;
+        box-sizing: border-box;
+    }
+
+    .select-origin {
+        position: absolute;
+        right: 10px;
+    }
+
+    .custom-select-text {
+        position: absolute;
+        top: 14px;
+        left: 15px;
+        font-size: 12px;
+        font-family: ProximaNova-Light !important;
+        font-weight: lighter;
+    }
+
+    .custom-select-arrow {
+        position: absolute;
+        top: 17px;
+        /*right: 15px;*/
+        width: 14px;
+        height: 14px;
+    }
+
+
+    .custom-select-option {
+        height: 48px;
+        line-height: 48px;
+        padding-left: 15px;
+        cursor: pointer;
+        box-sizing: border-box;
+        padding-bottom: -20px;
+    }
+
+    .custom-select-option:hover {
+        /*color: #ffffff;*/
+        /*background-color: #1172c4;*/
+        box-sizing: border-box;
+    }
+
+    .di-flex {
+        display: inline-flex;
+        border-top: 1px solid #eee;
+        width: 1350px
+    }
+
+    .li-margin {
+        margin-bottom: -20px !important;
+    }
+
+    .fl-center {
+        margin: 0 auto;
+        display: inline-block;
+    }
+
+    .flex-in-block {
+        display: inline-flex;
+        /*float: left;*/
+    }
+
+
+    .mr-right {
+        margin-right: 0 !important;
+    }
+
+    .price-st {
+        float: left;
+        font-size: 16px;
+        font-family: ProximaNova-Bold !important;
+    }
+
+    .dis-st {
+        float: right;
+        font-size: 16px;
+        font-family: ProximaNova-Bold !important;
+        color: #FA5500
+    }
+
+    .sec-st {
+        position: relative;
+        width: 100%;
+        height: 5000px;
+    }
+</style>
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
+<div class="culmn">
+    <!--Home page style-->
+
+    <nav>
+        <div th:replace="/fragments/nav.html :: navbar"></div>
+    </nav>
+
+
+    <div class="row" style="position: relative; height: auto; margin: 0 auto; padding-top: 220px">
+        <div class="main_features fix roomy-70 wrapper">
+            <div class="text-center">
+                <h3 class="h5-font mr-b-20">의류</h3>
+                <section>
+                    <ul style="text-align : center; font-size: small; margin-bottom: 12px">
+                        <a href="/women">
+                            <li class="li-float font-700">전체</li>
+                        </a>
+                        <a href="/women/outer" th:href="@{/women/outer}">
+                            <li class="li-float font-700">아우터</li>
+                        </a>
+                        <a href="/women/onepiece" th:href="@{/women/onepiece}">
+                            <li class="li-float font-700">원피스</li>
+                        </a>
+                        <a href="/women/shirt" th:href="@{/women/shirt}">
+                            <li class="li-float font-700">셔츠</li>
+                        </a>
+                        <a href="/women/tshirt" th:href="@{/women/tshirt}">
+                            <li class="li-float font-700">티셔츠</li>
+                        </a>
+                        <a href="/women/skirt" th:href="@{/women/skirt}">
+                            <li class="li-float font-700">스커트</li>
+                        </a>
+                        <a href="/women/denim" th:href="@{/women/denim}">
+                            <li class="li-float font-700">데님</li>
+                        </a>
+                        <a href="/women/pants" th:href="@{/women/pants}">
+                            <li class="li-float font-700">팬츠</li>
+                        </a>
+                    </ul>
+                    <br>
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+    <section id="features" class="features bg-white center">
+        <div>
+            <div class="row" style="position: relative; width: 90%;  margin: 0 auto;">
+                <div class="main_features fix wrapper">
+
+
+                    <!-- 셀렉트박스 -->
+                    <section class="di-flex">
+                        <div>
+                            <div class="custom-select" tabindex="0">
+                                <span class="custom-select-text">가격</span>
+                                <img src="/assets/images/arrow.png" class="custom-select-arrow">
+                            </div>
+                            <ul class="custom-select-list" style="display:none;">
+                                <li value="selectOption1" class="custom-select-option li-margin">100,000원 이하</li>
+                                <li value="selectOption2" class="custom-select-option li-margin">100,000원 ~
+                                    150,000원
+                                </li>
+                                <li value="selectOption3" class="custom-select-option li-margin">150,000원 ~
+                                    200,000원
+                                </li>
+                                <li value="selectOption4" class="custom-select-option li-margin">200,000원 ~
+                                    250,000원
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <div>
+                            <div class="custom-select" tabindex="0">
+                                <span class="custom-select-text">정렬</span>
+                                <img src="/assets/images/arrow.png" class="custom-select-arrow">
+                            </div>
+                            <ul class="custom-select-list" style="display:none;">
+                                <li value="selectOption2-2" class="custom-select-option li-margin">판매순</li>
+                                <li value="selectOption2-3" class="custom-select-option li-margin">높은가격순</li>
+                                <li value="selectOption2-4" class="custom-select-option li-margin">낮은가격순</li>
+                                <li value="selectOption2-5" class="custom-select-option li-margin">조회수높은순</li>
+                            </ul>
+                            <select class="select-origin">
+                                <option value="selectOption1" selected="selected">선택 옵션1</option>
+                                <option value="selectOption2">선택 옵션2</option>
+                            </select>
+                        </div>
+
+                        <div style="width: 100%; padding-top: 18px;">
+                            <h6 style="float: right; font-size: 13px !important;"
+                                th:text="${womenItems != null and womenItems.totalElements > 0 ? '총' + womenItems.totalElements + '개' : '총0개'}"></h6>
+                        </div>
+
+                    </section>
+
+                    <section style="width: 100%;">
+                        <div class="main_features fix" style="margin: 0 auto; width: 1362px;">
+                            <ul class="flex-in-block" th:each="wi: ${womenItems}"
+                                style="display: inline-block; float: left;">
+                                <li class="mr-right li-resize width-fix grid-item post-transition metal numberGreaterThan50">
+                                    <div style="display: flex; float: left">
+                                        <a th:href="@{|/women/detail/${wi.id}|}">
+                                            <img class="img-resize" th:src="${wi.imgStr}"></a>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <p class="font-title" th:text="${wi.brand}">SUNGBOON EDITOR</p>
+                                            <p class="font-sm" th:text="${wi.name}">[24매] 딥 콜라겐 마스크팩(6BOX)</p>
+                                        </div>
+                                        <div style="margin-top: 10px;display: flow-root;">
+                                            <!--                                                            <p class="pice-st" th:text="${wi.price}">24,500</p>-->
+                                            <p class="price-st"
+                                               th:text="${#numbers.formatInteger(wi.price, 3, 'COMMA') + '원'}">
+                                                24,500원</p>
+                                            <p class="dis-st"
+                                               th:text="${wi.discount != 0 ? + wi.discount + '%' : ''}">
+                                                45%</p>
+                                        </div>
+                                    </div>
+                                    <div style="display: inline-flex; align-items: baseline; float: left">
+                                        <i style="font-size:small; padding-top: 4px;color: #cccccc;margin-right: 2px; float: left"
+                                           class="fa-solid fa-heart"></i>
+                                        <p style="font-size: small" th:text="${wi.heart != 0 ? wi.heart: ''}">
+                                            1523
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</section></body></html>
+
+
+<!--=================페이징 처리=================-->
+<nav style="text-align: center; color: black">
+    <div class="text-xs-center">
+        <ul class="pagination justify-content-center first" id="pagination">
+            <!-- 이전 -->
+            <li th:if="${womenItems != null and womenItems.hasPrevious()}">
+                <a th:href="@{${'/' + path + '/selectSell'}(value=${value}, page=${womenItems.previousPageable().pageNumber})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- 페이지 번호 -->
+            <th:block th:if="${womenItems != null}">
+                <th:block th:each="i : ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                    <li>
+                        <a class="pageNumber"
+                           th:href="@{${'/' + path + '/selectSell'}(value=${value}, page=${i})}"
+                           th:text="${i}"
+                           th:classappend="${currentPage == i} ? 'active' : ''">
+                        </a>
+                    </li>
+                </th:block>
+            </th:block>
+
+            <!-- 다음 -->
+            <li th:if="${womenItems != null and womenItems.hasNext()}">
+                <a th:href="@{${'/' + path + '/selectSell'}(value=${value}, page=${currentPage + 1})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        // currentPath 변수를 선언하고 초기화합니다.
+        const currentPath = 'women'; // 이 값을 필요한 경로로 수정하세요.
+
+        // 모든 'custom-select-option' 클래스의 요소를 선택합니다.
+        const customOptions = document.querySelectorAll('.custom-select-option');
+
+        // 선택된 옵션의 value를 초기화하는 함수입니다.
+        function resetValue() {
+            const allSelectOrigins = document.querySelectorAll('.select-origin');
+            allSelectOrigins.forEach(selectOrigin => {
+                selectOrigin.value = ''; // 선택된 옵션의 value를 초기화합니다.
+            });
+        }
+
+        // 각 요소에 대해 클릭 이벤트 리스너를 추가합니다.
+        customOptions.forEach(option => {
+            option.addEventListener('click', function () {
+                // 옵션이 클릭될 때 기존 값을 초기화합니다.
+                resetValue();
+
+                // 클릭된 요소의 'value' 속성을 추출합니다.
+                // URL을 구성합니다.
+                const value = option.getAttribute('value'); // value 변수의 값을 설정합니다.
+
+                console.log(value)
+                if (value === 'selectOption1' || value === 'selectOption2' || value === 'selectOption3' || value === 'selectOption4' || value === 'selectOption5') {
+                    url = `/women/select?value=${value}`;
+                } else if (value === 'selectOption2-2' || value === 'selectOption2-3' || value === 'selectOption2-4' || value === 'selectOption2-5' || value === 'selectOption2-5') {
+                    url = `/women/selectSell?value=${value}`;
+                } else {
+                    console.log('Unexpected value:', value);
+                    // 여기서 예기치 않은 `value`를 처리할 수 있습니다.
+                }
+
+                // 콘솔에 로그를 출력합니다.
+                console.log(url);
+
+                // window.location.href를 사용하여 지정된 URL로 페이지를 이동합니다.
+                window.location.href = url;
+            });
+        });
+
+        // 드롭다운 토글 처리
+        $('.custom-select').on('click', function () {
+            $(this).toggleClass('selected');
+            $('.custom-select-list').hide();
+            $(this).next('.custom-select-list').toggle();
+        });
+
+        // custom-select-option 요소를 클릭할 때 원래의 select 요소 업데이트 및 드롭다운 숨김
+        $('.custom-select-option').on('click', function () {
+            const selectList = $(this).closest('.custom-select-list');
+            const selectOrigin = selectList.next('.select-origin');
+
+            // 선택된 값과 관련된 작업 수행
+            const value = $(this).attr('value');
+            selectOrigin.val(value);
+            selectList.hide();
+        });
+
+        // 옵션 리스트 외 다른 곳 클릭 시 숨기기
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('.custom-select').length) {
+                $('.custom-select-list').hide();
+                $('.custom-select').removeClass('selected');
+            }
+        });
+    });
+</script>
