@@ -70,6 +70,6 @@ server:
   port: 8080
 
 # 업로드한 파일을 읽어올 경로 설정
-itemImgLocation: "/home/ec2-user/imgdown" # C:/shop/item
-uploadPath: "/home/ec2-user/imgdown/" #file:///C:/shop/, # 리소스 업로드 경로, 항상 마지막에 /로 닫아주기.
+itemImgLocation: ./home/ec2-user/imgdown # C:/shop/item
+uploadPath: ./home/ec2-user/imgdown/ #file:///C:/shop/, # 리소스 업로드 경로, 항상 마지막에 /로 닫아주기.
 
