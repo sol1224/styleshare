@@ -1,7 +1,4 @@
 spring:
-  config:
-    activate:
-      on-profile: local
 
   servlet:
     multipart:
@@ -34,42 +31,4 @@ server:
 itemImgLocation: C:/petbuddy/item # C:/shop/item
 uploadPath: file:///C:/petbuddy/item/ #file:///C:/shop/, # 리소스 업로드 경로, 항상 마지막에 /로 닫아주기.
 
-
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 100MB
-
-  datasource:
-    url: jdbc:mysql://localhost:3306/styleShare?createDatabaseIfNotExist=true
-    username: root
-    password: 1111
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-#        show_sql: true
-        format_sql: true
-
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.orm.jdbc.bind: trace
-
-server:
-  port: 8080
-
-# 업로드한 파일을 읽어올 경로 설정
-itemImgLocation: C:/petbuddy/item # C:/shop/item
-uploadPath: file:///C:/petbuddy/item/ #file:///C:/shop/, # 리소스 업로드 경로, 항상 마지막에 /로 닫아주기.
 
