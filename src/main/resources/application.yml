@@ -47,7 +47,7 @@ spring:
       max-request-size: 100MB
 
   datasource:
-    url: jdbc:mysql://3.35.26.21/styleShare?createDatabaseIfNotExist=true
+    url: jdbc:mysql://54.180.89.117 /styleShare?createDatabaseIfNotExist=true
     username: root
     password: 1111
     driver-class-name: com.mysql.cj.jdbc.Driver
