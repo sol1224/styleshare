@@ -1,8 +1,0 @@
-spring:
-  config:
-    #  default로 설정된 스캔 범위는 resources폴더로, 하위 폴더까지 스캔하지 않기 때문에 따로 import
-    import:
-      - classpath:/yaml/application-local.yml
-      - classpath:/yaml/application-dev.yml
-  profiles:
-    active: local
