@@ -3,7 +3,7 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 
     <style>
         td {
@@ -128,7 +128,29 @@
             margin-left: 0 !important;
         }
 
+        textarea:focus {
+            background-color: #f0f0f0;
+            border: none;
+        }
+        input[type=text]:focus {
+            background-color: #f0f0f0;
+            border: none;
+        }
+        input[type=text] {
+            border: none;
+            background-color: #f0f0f0;
+        }
 
+        .form-control {
+        border: none;
+        }
+
+        .form-control:focus {
+            border: none;
+        }
+        .bg-t {
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 
@@ -137,7 +159,7 @@
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
@@ -147,16 +169,16 @@
         <h1 style="font-weight: 500; font-size: 39px">게시판</h1>
         <section>
             <ul style="text-align : center; font-size: small">
-                <a href="/notice">
+                <a href="/faq">
                     <li class="li-float">F&A</li>
                 </a>
-                <a href="/board">
+                <a href="/news">
                     <li class="li-float">NEWS</li>
                 </a>
-                <a href="#">
+                <a href="/board">
                     <li class="li-float">게시판</li>
                 </a>
-                <a href="/faq">
+                <a href="/benefit">
                     <li class="li-float">회원혜택안내</li>
                 </a>
 <!--                <a href="/privateboard">-->
@@ -209,7 +231,7 @@
             <div class="card-body">
                 <form th:action="@{/board/detail/{id}(id=${id})}" th:method="post" id="commentForm">
                     <div id="comment-write" class="form-group" style="margin-bottom: 10px;">
-                        <textarea id="commentContents" name="content" class="form-control text-area"
+                        <textarea id="commentContents" name="content" class="form-control text-area bg-t"
                                   rows="3"></textarea>
                         <button id="comment-write-btn" class="btn btn-primary comment-button black"
                                 onclick="commentWrite(event)">등록
@@ -246,7 +268,7 @@
 </div>
 
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 
 <script th:inline="javascript">
@@ -274,13 +296,14 @@
         const id = [[${board.id}]]; // 게시글 번호
         const createdAt = [[${comment.createdAt}]];
         const nickname = [[${comment.nickname}]];
+        const writer = [[${board.writer}]]
 
         $.ajax({
             // 요청 방식 : post, 요청 주소 : /comment/save, 요청 데이터: 작성 내용
             type: "post",
             url: "/comment/save",
             data: {
-                // "commentWriter": writer,
+                "commentWriter": writer,
                 "content": contents,
                 "id": id,
                 "boardId": id,
@@ -303,7 +326,7 @@
                 }
                 output += "</table>";
                 document.getElementById('comment-list').innerHTML = output;
-                // document.getElementById('commentWriter').value = '';
+                document.getElementById('commentWriter').value = '';
                 document.getElementById('commentContents').value = '';
             },
             error: function (err) {

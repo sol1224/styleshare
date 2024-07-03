@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="reset.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
     #top_search input {
@@ -202,6 +202,16 @@
         margin-right: 2px;
         float: left
     }
+
+    .h3-f-s {
+        font-size: 42px;
+        font-family: ProximaNova-thin, "Noto Sans KR" !important;
+        font-weight: 100 !important;
+        margin-bottom: 40px;
+    }
+    .h6-f-s {
+        margin-bottom: 20px;
+    }
 </style>
 
 <body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
@@ -209,14 +219,16 @@
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
     <div class="row ro-st2">
         <div class="main_features fix roomy-70 wrapper">
             <div class="text-center">
-                <h3 class="h5-font mr-b-20">SALE</span>
+                <h3 class="h5-font mr-b-20 h3-f-s">BRAND SALE EVENT</h3>
+                <h6 class="h6-f-s">놓칠수 없는 세일 이벤트를 확인하세요</h6>
+                <img src="/assets/images/sale_event.png"><br><br>
                 </h3>
             </div>
         </div>
@@ -228,7 +240,7 @@
             <div class="row ro-st3">
                 <div class="main_features fix wrapper">
 
-
+                    <h3 class="h5-font mr-b-20 h3-f-s">SALE</h3>
                     <section class="st-we">
                         <div class="main_features fix did-st">
                             <ul class="flex-in-block" th:each="wi: ${items}">
@@ -261,6 +273,7 @@
                             </ul>
                         </div>
                     </section>
+                    <img src="/assets/images/sale_c.png"><br><br>
                 </div>
             </div>
         </div>
@@ -306,7 +319,7 @@
 
 </body>
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 </div>
 

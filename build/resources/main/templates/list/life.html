@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="reset.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
     #top_search input {
@@ -281,6 +281,17 @@
         color: black;
         margin-top: 80px
     }
+
+    .h1-f {
+        font-size: 40px;
+        margin-top: 120px;
+        margin-bottom: 40px;
+    }
+    .h5-font {
+        font-size: 40px;
+        font-family: ProximaNova-Thin, "Noto Sans KR" !important;
+        font-weight: 200 !important;
+    }
 </style>
 
 <body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
@@ -288,17 +299,22 @@
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
     <div class="row ro-st">
         <div class="main_features fix roomy-70 wrapper">
             <div class="text-center">
-                <h3 class="h5-font mr-b-40">라이프</h3>
+                <h1 class="h5-font mr-b-40">라이프</h1>
+                <img src="/assets/images/life_m.png">
+
+                <h1 class="h5-font mr-b-40 h1-f">LIFE STORY</h1>
+                <img src="/assets/images/life_m2.png"><br>
+                <img src="/assets/images/life_m3.png">
             </div>
         </div>
-    </div>
+    </div><br><br>
 
 
     <section id="features" class="features bg-white center">
@@ -477,7 +493,7 @@
 </body>
 
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 
 

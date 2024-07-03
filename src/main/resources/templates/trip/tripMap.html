@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
     <style>
         .btn_search {
@@ -271,13 +271,14 @@
 <div class="culmn">
     <!--Home page style-->
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
     <div id="map" style="width:100%; "></div>
 
     <script type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=815055c6971c63ed8a26eee958161a12"></script>
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey="></script>
+
     <script th:inline="javascript" charset="UTF-8">
 
 
@@ -291,6 +292,8 @@
         var map = new kakao.maps.Map(mapContainer, mapOption);
 
         var mapList = [[${mapList}]];
+        console.log(mapList);
+
         var position = [];
         var infowindows = []; // 모든 인포윈도우를 저장하기 위한 배열
 
@@ -317,7 +320,7 @@
 
 
             var infowindow = new kakao.maps.InfoWindow({
-                content: '<div class="overlaybox container2" style="padding:14px; font-size:14px; ' +
+                content: '<div class="overlaybox container2" style="padding:14px; text-align: left; font-size:14px; ' +
                     'height: auto; width: auto; margin: -5px -5px 0 -10px; height: 92px; ' +
                     'width: 400px; border-radius: 20px; border: none; outline: solid white 3px; background: white;">' +
                     '<div class="box" style="margin-right: 10px"><b>' + mapList[i].name + '</b></div>' +
@@ -368,7 +371,7 @@
 
 
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 
 <!-- JS includes -->

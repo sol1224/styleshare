@@ -2,7 +2,7 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
     * {
@@ -94,6 +94,25 @@
         /*padding: 4px 4px !important;*/
         line-height: 22px;
     }
+    .field-error {
+        font-size: 12px;
+        color: #666666;
+        font-family: ProximaNova-Light !important;, "Noto Sans KR";
+        /*align-content: center;*/
+        padding-left: 10px;
+        padding-top: 9px;
+    }
+    .form-control {
+        padding: 2px 6px !important;
+    }
+    .tx-pa {
+        width: 880px;
+        padding-left: 10px;
+    }
+    .tx-b {
+        width: 880px;
+        border: 1px solid black;
+    }
 
 </style>
 <body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
@@ -101,7 +120,7 @@
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
@@ -111,16 +130,16 @@
         <h1>게시판</h1><br>
         <section>
             <ul style="text-align : center; font-size: small">
-                <a href="/notice">
+                <a href="/faq">
                     <li class="li-float">F&A</li>
                 </a>
-                <a href="/board">
+                <a href="/news">
                     <li class="li-float">NEWS</li>
                 </a>
-                <a href="#">
+                <a href="/board">
                     <li class="li-float">게시판</li>
                 </a>
-                <a href="/faq">
+                <a href="/benefit">
                     <li class="li-float">회원혜택안내</li>
                 </a>
 <!--                <a href="/privateboard">-->
@@ -134,23 +153,24 @@
     </section>
 
 
-    <form class="row g-3" style="display:grid; width: 100%; margin-top: 60px; margin-bottom: 80px;"
-          action="" th:action th:object="${board}" method="post">
+    <form class="row g-3 form-sty" name="inputForm" enctype="multipart/form-data" onsubmit="return checkField();" th:action="@{/board/boardWrite}" th:object="${boardFormDto}" method="post">
         <div style="margin-bottom: 40px">
             <div style="display: inline-flex; margin: 0 auto;">
                 <label for="title" style="float:left; margin-right: 140px; font-size: 14px">제목<span
                         class="essential-mark" style="color: #ff1414 !important;"> *</span></label>
-                <input type="text" style="width: 880px" class="form-control input-border" id="title" th:field="*{title}"
-                       th:errorclass="field-error">
-                <div class="field-error" th:errors="*{id}"/>
+                <input type="text" class="form-control input-border tx-pa" id="title" name="title" th:field="*{title}"
+                      >
+<!--                <div class="field-error" th:errors="*{title}"/>-->
+                <div class="field-error">※ 제목은 빈문자 혹은 공백을 입력할 수 없습니다.</div>
             </div>
             <div style="display: inline-flex; margin: 0 auto;">
                 <label for="content" style="float:left; margin-right: 140px; font-size: 14px">내용<span
                         class="essential-mark" style="color: #ff1414 !important;"> *</span></label>
-                <textarea cols="2" style="width: 880px" class="form-control input-border" id="content"
+                <textarea cols="2" class="form-control input-border tx-b" id="content" name="
+content"
                           th:field="*{content}"
-                          th:errorclass="field-error"></textarea>
-                <div class="field-error" th:errors="*{id}"/>
+                         ></textarea>
+               <div class="field-error">※ 내용은 빈문자 혹은 공백을 입력할 수 없습니다.</div>
             </div>
         </div>
         <div>
@@ -158,7 +178,7 @@
                     id="btnList">목록
             </button>
             <button onclick="location.href='/board/detail/{board.id}'" type="submit"
-                    class="btn btn-sm btn-primary black" id="btnSave">저장
+                    class="btn btn-sm btn-primary black submit" id="btnSave">저장
             </button>
         </div>
     </form>
@@ -167,9 +187,8 @@
 </div>
 
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
-
 
 <!-- JS includes -->
 <script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
     #top_search input {
@@ -137,6 +137,19 @@
         font-family: ProximaNova-Semibold !important;
         font-weight: 700;
     }
+    .m100 {
+        margin-bottom: 80px;
+        margin-top: 120px;
+    }
+    .mg200 {
+        margin-bottom: 200px;
+    }
+    .mg80{
+        margin-bottom: 80px;
+    }
+    .mg60{
+        margin-bottom: 200px;
+    }
 
 
 </style>
@@ -159,13 +172,33 @@
 <div class="culmn">
     <!--Home page style-->
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
     <!--Home Sections-->
 
-    <section id="home" class="home bg-black fix"> <!-- home : main 이미지 변경-->
-        <div class="overlay"></div>
+    <section id="home" class="bg-black fix"> <!-- home : main 이미지 변경-->
+<!--        <div class="overlay"></div>  메인 이미지 -->
+
+        <!--Choose section-->
+        <section style="margin-top: 50px; margin-bottom: 50px">
+            <div class="choose_mac" style="margin-top: 160px">
+                <div class="choose_slide">
+                    <div class="choose_item">
+                        <img src="/assets/images/rrrrr.jpg" alt="">
+                    </div>
+                    <div class="choose_item">
+                        <img src="/assets/images/rrrrr2.jpg" alt="">
+                    </div>
+                    <div class="choose_item">
+                        <img src="/assets/images/rrrrr3.jpg" alt="">
+                    </div>
+                </div><!-- End off col-md-6 -->
+
+
+            </div><!-- End off row -->
+        </section><!-- End off choose section -->
+
         <div class="container">
             <div class="row">
                 <div class="main_home text-center">
@@ -190,10 +223,12 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="main_about text-center">
-                        <!--                        <h2 class="text-white">- & -</h2>-->
-                        <img class="m200" style="width: 90%" src="/assets/images/m2.png">
-                        <img class="m200" src="/assets/images/m3.png">
-                        <img lass="m200" src="/assets/images/m5.png">
+                        <img class="m100" src="/assets/images/mmm1.png">
+                        <img class="m200 mg200" src="/assets/images/mmm2.jpg">
+                        <img class="mg200 mg60" src="/assets/images/mmm3.png">
+                        <img class="mg200" src="/assets/images/mmm4.jpg">
+                        <img class="mg200" src="/assets/images/mmm7.png">
+                        <img class="mg80" src="/assets/images/mmm6.jpg">
                     </div>
                 </div>
             </div>
@@ -438,7 +473,7 @@
         </div>
     </div>
     <footer>
-        <div th:replace="/fragments/footer.html :: footer"></div>
+        <div th:replace="fragments/footer.html :: footer"></div>
     </footer>
 
 

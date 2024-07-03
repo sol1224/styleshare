@@ -1,5 +1,6 @@
 package proj.petbuddy.domain.board;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,7 @@ public class Comment extends BaseEntity {
     private Board board;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 

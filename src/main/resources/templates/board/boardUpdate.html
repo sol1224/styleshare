@@ -2,7 +2,7 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
     #top_search input {
@@ -85,13 +85,16 @@
     .text-al-left {
         text-align: left;
     }
+    .form-control {
+        padding: 2px 6px !important;
+    }
 </style>
 <body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
 <div class="culmn">
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
@@ -101,16 +104,16 @@
         <h1 style="font-weight: 500; font-size: 39px">게시글수정</h1>
         <section>
             <ul style="text-align : center; font-size: small">
-                <a href="/notice">
+                <a href="/faq">
                     <li class="li-float">F&A</li>
                 </a>
-                <a href="/board">
+                <a href="/news">
                     <li class="li-float">NEWS</li>
                 </a>
-                <a href="#">
+                <a href="/board">
                     <li class="li-float">게시판</li>
                 </a>
-                <a href="/faq">
+                <a href="/benefit">
                     <li class="li-float">회원혜택안내</li>
                 </a>
 <!--                <a href="/privateboard">-->
@@ -133,7 +136,7 @@
                     <div class="container" role="main">
                         <div class="form-group text-al-left">
                             <label for="title">제목</label>
-                            <input type="text" style="padding-left: 20px" class="form-control" id="title" name="title"
+                            <input type="text" style="padding-left: 8px" class="form-control" id="title" name="title"
                                    th:field="*{title}"
                                    th:value="${board.title}">
                         </div>
@@ -167,7 +170,7 @@
 </div>
 
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 
 

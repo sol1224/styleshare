@@ -2,9 +2,24 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
+    table {
+        width: 78% !important;
+        margin-top: 0 !important;
+    }
+
+    .table > thead > tr > th,
+    .table > tbody > tr > th,
+    .table > tfoot > tr > th,
+    .table > thead > tr > td,
+    .table > tbody > tr > td,
+    .table > tfoot > tr > td {
+        padding: 20px !important;
+        font-size: 14px !important;
+    }
+
     #top_search input {
         width: 335px;
         height: 44px;
@@ -74,73 +89,75 @@
         padding: 0;
     }
 
-    table tr {
-        height: 60px;
+    .wi-200 {
+        width: 200px;
+    }
+    .wi-500 {
+        width: 500px;
     }
 
-    table tr, th, td {
-        vertical-align: middle !important;
-    }
 
 </style>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
 <div class="culmn">
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
-    <!-- Banner -->
-    <section id="intro" class="main" style="padding: 8em;}">
+    <section id="intro" class="main">
         <span class="icon fa-diamond major"></span>
-        <h1>게시판</h1><br>
+        <h1 style="font-weight: 500; font-size: 39px">고객센터</h1>
+
         <section>
             <ul style="text-align : center; font-size: small">
-                <a href="/notice">
+                <a href="/faq">
                     <li class="li-float">F&A</li>
                 </a>
-                <a href="/board">
+                <a href="/news">
                     <li class="li-float">NEWS</li>
                 </a>
-                <a href="#">
+                <a href="/board">
                     <li class="li-float">게시판</li>
                 </a>
-                <a href="/faq">
+                <a href="/benefit">
                     <li class="li-float">회원혜택안내</li>
                 </a>
-<!--                <a href="/privateboard">-->
-<!--                    <li class="li-float">1:1문의</li>-->
-<!--                </a>-->
+                <!--                <a href="/privateboard">-->
+                <!--                    <li class="li-float">1:1문의</li>-->
+                <!--                </a>-->
             </ul>
             <br>
         </section>
-
-
     </section>
 
 
     <section>
         <section>
             <table class="table">
-
                 <form class="d-flex" method="get" action="/board/search" role="search">
-                    <div style="margin-right: 10%; margin-top: 40px; float: right; display: flex">
-                        <input class="form-control me-2" type="text" placeholder="검색" id="search" name="keyword">
-                        <button class="btn btn-primary" type="button">Search</button>
+                    <div style="width:78%; height: 40px; display: inline-block;">
+                        <!-- ★★★ 타임리프 문법에서는 get을 생략하여 사용 -> 예) getTotalElements > totalElements -->
+                        <p style="float:left;line-height: 60px; font-size: 14px">총 건수: <span
+                                th:text="${boards.totalElements}"></span></p>
+                        <input style="float: right; width: 150px;" class="form-control me-2" type="text"
+                               placeholder="검색" id="keyword" name="keyword" th:value="${param.keyword}">
                     </div>
+
                 </form>
 
                 <thead>
-                <!-- ★★★ 타임리프 문법에서는 get을 생략하여 사용 -> 예) getTotalElements > totalElements -->
-                <p style="margin: 40px 60px -60px 90px">총 건수: <span th:text="${boards.totalElements}"></span></p>
+
+
                 <tr>
-                    <th>No</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>등록일</th>
-                    <th>조회수</th>
+                    <th class="wi-200">No</th>
+                    <th class="wi-500">제목</th>
+                    <th class="wi-200">작성자</th>
+                    <th class="wi-200">작성시간</th>
+                    <th class="wi-200">좋아요</th>
                 </tr>
                 </thead>
 
@@ -150,9 +167,15 @@
                     <td>
                         <a th:href="@{|/board/detail/${board.id}|}" th:text="${board.title}"></a>
                     </td>
-                    <td>작성자</td>
-                    <td th:text="${#temporals.format(board.createdTime, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${#temporals.format(board.updateTime, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${board.writer != null ? board.writer : '손님'}">작성자</td>
+                    <!--                    <td th:text="${#temporals.format(T(java.time.LocalDateTime).parse(board.createdAt, T(java.time.format.DateTimeFormatter).ofPattern('yy. M. d. a h:mm')), 'yyyy-MM-dd')}"></td>-->
+                    <!--                    <td th:text="${#temporals.format(T(java.time.LocalDateTime).parse(board.updatedAt, T(java.time.format.DateTimeFormatter).ofPattern('yy. M. d. a h:mm')), 'yyyy-MM-dd')}"></td>-->
+                    <td>
+                        <a th:text="${board.createdAt}"></a>
+                    </td>
+                    <td>
+                        <a th:text="${board.updatedAt}"></a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -161,50 +184,56 @@
 
             <div class="col-12 ">
                 <div class="d-grid">
-                    <a style="margin-right: 10%;" href="/board/boardWrite" class="btn btn-lg rounded-0 fs-6">글쓰기</a>
+                    <!--                                    <button href="/board/boardWrite" class="btn">글쓰기</button>-->
+                    <a style="margin-right: 10%;" href="/board/boardWrite" class="black btn">글쓰기</a>
                 </div>
             </div>
 
         </section>
-
-        <nav style="text-align: center;">
-            <div class="text-xs-center">
-                <ul class="pagination justify-content-center">
-                    <!-- 이전 -->
-                    <li th:if="${boards.hasPrevious()}">
-                        <a th:href="@{/board(page=${boards.previousPageable().pageNumber})}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-
-                    <!-- 페이지 번호 -->
-                    <!-- th:each 를 사용하기 위해, th:block 을 활용하였다.
-                    <th:block> 내부에 작성된 태그들을 반복시키고자 하지만, 내부 태그들을 묶을 적당한 방법을 HTML에서 제공받을 수 없으므로, 자체적인 <th:block> 태그를 사용한다.-->
-                    <!-- ${#numbers.sequence(from,to,step)} : x에서 y까지 정수 시퀀스 생성 -->
-                    <th:block th:if="${boards.getTotalElements() > 0}"
-                              th:each="i : ${#numbers.sequence(startBlockPage, endBlockPage)}">
-                        <li th:classappend="${boards.pageable.pageNumber== i} ? 'page-item disabled' : 'page-item'">
-                            <a th:href="@{/board(page=${i})}" class="page-link" th:text="${i}"></a>
+        <section style="padding-bottom: 100px">
+            <!--=================페이징 처리=================-->
+            <nav style="text-align: center; color: black">
+                <div class="text-xs-center">
+                    <ul class="pagination justify-content-center first" id="pagination">
+                        <!-- 이전 -->
+                        <li th:if="${boards.hasPrevious()}">
+                            <a th:href="@{/board(page=${boards.previousPageable().pageNumber})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
                         </li>
-                    </th:block>
 
-                    <!-- 다음 -->
-                    <li th:if="${boards.hasNext()}">
-                        <a th:href="@{/board(page=${boards.nextPageable().pageNumber})}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+                        <!-- 페이지 번호 -->
+                        <th:block th:if="${boards != null}">
+                            <th:block th:each="i : ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                                <li>
+                                    <!-- 카테고리에 따라 동적으로 href 변경 -->
+                                    <a class="pageNumber"
+                                       th:href="@{'/board'(page=${i})}"
+                                       th:text="${i}"
+                                       th:classappend="${currentPage == i} ? 'active' : ''">
+                                    </a>
+                                </li>
+                            </th:block>
+                        </th:block>
 
+                        <!-- 다음 -->
+                        <li th:if="${boards != null and boards.hasNext()}">
+                            <a th:href="@{/board(page=${currentPage + 2})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+
+        </section>
 
     </section>
-
 </div>
 
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 
 

@@ -60,10 +60,10 @@ public class LoginController {
 //        return "/mypage/login";
         if (user == null || user.getUsername() == null) {
             // 사용자가 로그인되어 있지 않거나 사용자 이름이 null인 경우 로그인 페이지로 리다이렉트
-            return "/mypage/login";
+            return "mypage/login";
         } else {
             model.addAttribute("userName", user.getUsername());
-            return "/mypage/login";
+            return "mypage/login";
         }
 
     }
@@ -71,7 +71,7 @@ public class LoginController {
     @GetMapping("/login/error")
     public String loginError(Model model) {
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요.");
-        return "/mypage/login";
+        return "mypage/login";
     }
 
     @GetMapping("/logout")
@@ -104,7 +104,7 @@ public class LoginController {
         }
 
         model.addAttribute("member", member);
-        return "/mypage/mypage";
+        return "mypage/mypage";
     }
 
     /**

@@ -114,7 +114,6 @@ public class ItemController {
             Long longValue = Long.parseLong(selectedValue);
             itemService.saveItem(itemFormDto, itemImgFileList, longValue);
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
             return "item/itemForm";
         }
 
@@ -265,6 +264,20 @@ public class ItemController {
         return "list/itemDetail";
     }
 
+    @GetMapping("/best/detail/{id}")
+    public String bestDetail(Model model, @PathVariable("id") Long id) {
+        ItemDetailResponse item = itemService.itemDetail(id);
+        model.addAttribute("item", item);
+        return "list/itemDetail";
+    }
+
+    @GetMapping("/sale/detail/{id}")
+    public String saleDetail(Model model, @PathVariable("id") Long id) {
+        ItemDetailResponse item = itemService.itemDetail(id);
+        model.addAttribute("item", item);
+        return "list/itemDetail";
+    }
+
 
     /**
      * -----------------------------------------------------------
@@ -305,6 +318,36 @@ public class ItemController {
     /**
      * 셀렉트박스 (가격.정렬)
      **/
+    @GetMapping("/new/select")
+    public String selectOptionNew(@RequestParam("value") String value, Model model, @PageableDefault(size = 30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<Item> items = null;
+
+        switch (value) {
+            case "selectOption1":
+                // "100,000원 이하"의 경우
+                items = itemRepository.findByPriceLessThanEqual(100000, pageable);
+                break;
+            case "selectOption2":
+                // "100,000원 ~ 150,000원"의 경우
+                items = itemRepository.findByPriceBetween(100000, 150000, pageable);
+                break;
+            case "selectOption3":
+                // "150,000원 ~ 200,000원"의 경우
+                items = itemRepository.findByPriceBetween(150000, 200000, pageable);
+                break;
+            case "selectOption4":
+                // "200,000원 ~
+                items = itemRepository.findByPriceGreaterThanEqual(200000, pageable);
+                break;
+            default:
+        }
+        addPagingAttributes(model, items);
+        model.addAttribute("value", value);
+        model.addAttribute("path", "new");
+
+        return "list/selectItem";
+    }
 
     @GetMapping("/women/select")
     public String selectOption(@RequestParam("value") String value, Model model, @PageableDefault(size = 30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {

@@ -1,9 +1,6 @@
 package proj.petbuddy.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +45,9 @@ public class MemberController {
         return "mypage/joinSaved"; // 회원 가입 후 메인 화면으로 이동
     }
 
-    /** 중복회원 검증 **/
+    /**
+     * 중복회원 검증
+     **/
     @PostMapping("/idCheck")
     @ResponseBody
     public int idCheck(@RequestParam("id") String id) {

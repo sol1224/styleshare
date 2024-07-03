@@ -17,7 +17,7 @@ public class ItemImgService {
     private final ItemImgRepository itemImgRepository;
     private final FileService fileService;
 
-    @Value("${itemImgLocation}")
+    @Value("/home/ubuntu/img")
     private String itemImgLocation;
 
     public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile) throws Exception {

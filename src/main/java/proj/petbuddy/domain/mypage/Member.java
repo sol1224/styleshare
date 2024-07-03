@@ -2,6 +2,7 @@ package proj.petbuddy.domain.mypage;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -59,12 +60,14 @@ public class Member implements UserDetails {
 //    private Authority authority;
 
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<Board> boards = new ArrayList<>();
 
     @Embedded
     private Address address;
 
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<Orders> orders = new ArrayList<>();
 
     public void setMoney(Long money) {

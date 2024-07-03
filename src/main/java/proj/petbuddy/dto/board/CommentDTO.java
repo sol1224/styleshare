@@ -25,6 +25,7 @@ public class CommentDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt = LocalDateTime.now();
     @LastModifiedDate
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     private Long boardId;

@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="reset.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
     #top_search input {
@@ -99,6 +99,7 @@
     table tr, th, td {
         vertical-align: middle !important;
     }
+
 
     .h5-font {
         font-weight: normal !important;
@@ -236,46 +237,61 @@
         color: #FA5500
     }
 
-    .ro-sty {
+    .ro-st {
         position: relative;
         height: auto;
         margin: 0 auto;
         padding-top: 220px
     }
 
-    .ul-sty {
-        text-align: center;
-        font-size: small;
-        margin-bottom: 12px
-    }
-
-    .row-sty2 {
+    .ro-st2 {
         position: relative;
         width: 90%;
         margin: 0 auto;
+    }
+
+    .ul-st {
+        text-align: center;
+        font-size: small;
+        margin-bottom: 12px
     }
 
     .di-none {
         display: none;
     }
 
-    .di-sty1 {
+    .di-st2 {
         width: 100%;
         padding-top: 18px;
     }
 
-    .h6-sty {
+    .h6-st {
         float: right;
         font-size: 13px !important;
     }
 
-    .di-st-ri {
+    .wi-100 {
+        width: 100%;
+    }
+
+    .div-st2 {
         margin: 0 auto;
         width: 1362px;
     }
 
-    .wi-100 {
-        width: 100%;
+    .di-st6 {
+        margin-top: 10px;
+        display: flow-root;
+    }
+
+    .ul-st2 {
+        display: inline-block;
+        float: left;
+    }
+
+    .div-st1 {
+        display: flex;
+        float: left
     }
 
     .st-sm {
@@ -287,32 +303,24 @@
         padding-top: 4px;
         color: #cccccc;
         margin-right: 2px;
-        float: left
-    }
-
-    .pag-st {
-        text-align: center;
-        color: black
-    }
-
-    .di-inline {
-        display: inline-block;
         float: left;
     }
 
-    .di-flex {
-        display: flex;
-        float: left
-    }
-
-    .div-11 {
+    .di-st3 {
         display: inline-flex;
         align-items: baseline;
         float: left
     }
 
-    .mg-10-st {
-        margin-top: 10px
+    .pa-st {
+        text-align: center;
+        color: black
+    }
+    .h3-f-s {
+        font-size: 42px;
+        font-family: ProximaNova-thin, "Noto Sans KR" !important;
+        font-weight: 100 !important;
+        margin-bottom: 40px;
     }
 </style>
 
@@ -321,16 +329,16 @@
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
-    <div class="row ro-sty">
+    <div class="row ro-st">
         <div class="main_features fix roomy-70 wrapper">
             <div class="text-center">
-                <h3 class="h5-font mr-b-20">의류</h3>
+                <h3 class="h5-font mr-b-20 h3-f-s">의류</h3>
                 <section>
-                    <ul class="ul-sty">
+                    <ul class="ul-st">
                         <a href="/men">
                             <li class="li-float font-700">전체</li>
                         </a>
@@ -359,7 +367,7 @@
 
     <section id="features" class="features bg-white center">
         <div>
-            <div class="row row-sty2">
+            <div class="row ro-st2">
                 <div class="main_features fix wrapper">
 
 
@@ -401,27 +409,27 @@
                             </select>
                         </div>
 
-                        <div class="di-sty1">
-                            <h6 class="h6-sty"
+                        <div class="di-st2">
+                            <h6 class="h6-st"
                                 th:text="${menItems != null and menItems.totalElements > 0 ? '총' + menItems.totalElements + '개' : '총0개'}"></h6>
                         </div>
 
                     </section>
 
                     <section class="wi-100">
-                        <div class="main_features fix di-st-ri">
-                            <ul class="flex-in-block di-inline" th:each="wi: ${menItems}">
+                        <div class="main_features fix div-st2">
+                            <ul class="flex-in-block ul-st2" th:each="wi: ${menItems}">
                                 <li class="mr-right li-resize width-fix grid-item post-transition metal numberGreaterThan50">
-                                    <div class="di-flex">
-                                        <a th:href="@{|/men/detail/${wi.id}|}"><img class="img-resize"
-                                                                                    th:src="${wi.imgStr}"></a>
+                                    <div class="div-st1">
+                                        <a th:href="@{|/men/detail/${wi.id}|}">
+                                            <img class="img-resize" th:src="${wi.imgStr}"></a>
                                     </div>
                                     <div>
                                         <div>
                                             <p class="font-title" th:text="${wi.brand}">SUNGBOON EDITOR</p>
                                             <p class="font-sm" th:text="${wi.name}">[24매] 딥 콜라겐 마스크팩(6BOX)</p>
                                         </div>
-                                        <div class="mg-10-st">
+                                        <div class="di-st6">
                                             <p class="price-st"
                                                th:text="${#numbers.formatInteger(wi.price, 3, 'COMMA') + '원'}">
                                                 24,500원</p>
@@ -429,12 +437,12 @@
                                                th:text="${wi.discount != 0 ? + wi.discount + '%' : ''}">
                                                 45%</p>
                                         </div>
-                                        <div class="div-11">
-                                            <i class="fa-solid fa-heart i-st"></i>
-                                            <p class="st-sm" th:text="${wi.heart != 0 ? wi.heart: ''}">
-                                                1523
-                                            </p>
-                                        </div>
+                                    </div>
+                                    <div class="di-st3">
+                                        <i class="fa-solid fa-heart i-st"></i>
+                                        <p class="st-sm" th:text="${wi.heart != 0 ? wi.heart: ''}">
+                                            1523
+                                        </p>
                                     </div>
                                 </li>
                             </ul>
@@ -449,7 +457,7 @@
 
 
 <!--=================페이징 처리=================-->
-<nav class="pag-st">
+<nav class="pa-st">
     <div class="text-xs-center">
         <ul class="pagination justify-content-center first" id="pagination">
             <!-- 이전 -->
@@ -550,13 +558,12 @@
 
 </body>
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 </div>
 
 
 <!-- JS includes -->
-
 <script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
 <script src="/assets/js/vendor/bootstrap.min.js"></script>
 <script src="/assets/js/jquery.magnific-popup.js"></script>

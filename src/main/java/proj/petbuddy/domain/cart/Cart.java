@@ -2,13 +2,16 @@ package proj.petbuddy.domain.cart;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import proj.petbuddy.domain.board.BaseEntity;
 import proj.petbuddy.domain.mypage.Member;
 
 @Entity
 @Table(name = "cart")
-@Data
+@Getter
+@Setter
 @ToString
 public class Cart extends BaseEntity {
     @Id

@@ -2,7 +2,7 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
     table {
@@ -89,6 +89,15 @@
         padding: 0;
     }
 
+    .wi-200 {
+        width: 200px;
+    }
+
+    .wi-500 {
+        width: 500px;
+    }
+
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
@@ -96,7 +105,7 @@
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
@@ -106,7 +115,7 @@
 
         <section>
             <ul style="text-align : center; font-size: small">
-                <a href="/notice">
+                <a href="/faq">
                     <li class="li-float">F&A</li>
                 </a>
                 <a href="/news">
@@ -115,12 +124,12 @@
                 <a href="/board">
                     <li class="li-float">게시판</li>
                 </a>
-                <a href="/faq">
+                <a href="/benefit">
                     <li class="li-float">회원혜택안내</li>
                 </a>
-<!--                <a href="/privateboard">-->
-<!--                    <li class="li-float">1:1문의</li>-->
-<!--                </a>-->
+                <!--                <a href="/privateboard">-->
+                <!--                    <li class="li-float">1:1문의</li>-->
+                <!--                </a>-->
             </ul>
             <br>
         </section>
@@ -135,8 +144,8 @@
                         <!-- ★★★ 타임리프 문법에서는 get을 생략하여 사용 -> 예) getTotalElements > totalElements -->
                         <p style="float:left;line-height: 60px; font-size: 14px">총 건수: <span
                                 th:text="${boards.totalElements}"></span></p>
-                        <input style="float: right; width: 150px;" class="form-control me-2" type="text"
-                               placeholder="검색" id="search" name="keyword">
+                        <input style="float: right; width: 200px;" class="form-control me-2" type="text"
+                               placeholder="검색" id="keyword" name="keyword" th:value="${param.keyword}">
                     </div>
 
                 </form>
@@ -145,11 +154,11 @@
 
 
                 <tr>
-                    <th>No</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성시간</th>
-                    <th>좋아요</th>
+                    <th class="wi-200">No</th>
+                    <th class="wi-500">제목</th>
+                    <th class="wi-200">작성자</th>
+                    <th class="wi-200">작성시간</th>
+                    <th class="wi-200">좋아요</th>
                 </tr>
                 </thead>
 
@@ -159,9 +168,15 @@
                     <td>
                         <a th:href="@{|/board/detail/${board.id}|}" th:text="${board.title}"></a>
                     </td>
-                    <td>작성자</td>
-                    <td th:text="${#temporals.format(T(java.time.LocalDateTime).parse(board.createdAt, T(java.time.format.DateTimeFormatter).ofPattern('yy. M. d. a h:mm')), 'yyyy-MM-dd')}"></td>
-                    <td th:text="${#temporals.format(T(java.time.LocalDateTime).parse(board.updatedAt, T(java.time.format.DateTimeFormatter).ofPattern('yy. M. d. a h:mm')), 'yyyy-MM-dd')}"></td>
+                    <td th:text="${board.writer == 'admin11' ? '관리자' : board.writer}">작성자</td>
+                    <!--                    <td th:text="${#temporals.format(T(java.time.LocalDateTime).parse(board.createdAt, T(java.time.format.DateTimeFormatter).ofPattern('yy. M. d. a h:mm')), 'yyyy-MM-dd')}"></td>-->
+                    <!--                    <td th:text="${#temporals.format(T(java.time.LocalDateTime).parse(board.updatedAt, T(java.time.format.DateTimeFormatter).ofPattern('yy. M. d. a h:mm')), 'yyyy-MM-dd')}"></td>-->
+                    <td>
+                        <a th:text="${board.createdAt}"></a>
+                    </td>
+                    <td>
+                        <a th:text="${board.updatedAt}"></a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -171,9 +186,32 @@
             <div class="col-12 ">
                 <div class="d-grid">
                     <!--                                    <button href="/board/boardWrite" class="btn">글쓰기</button>-->
-                    <a style="margin-right: 10%;" href="/board/boardWrite" class="black btn">글쓰기</a>
+                    <a style="margin-right: 10%; width: 150px;" href="/board/boardWrite" class="black btn">글쓰기</a>
                 </div>
             </div>
+
+            <script th:inline="javascript">
+                user = [[${user}]]
+                // 페이지가 로드될 때 실행되는 함수
+                document.addEventListener("DOMContentLoaded", function () {
+                    // "글쓰기" 버튼 요소 가져오기
+                    var writeButton = document.querySelector('.black.btn');
+
+                    // 버튼 클릭 이벤트 핸들러 함수
+                    writeButton.addEventListener('click', function (event) {
+                        // 사용자 확인
+                        if (user == null) {
+                            // 사용자가 로그인되어 있지 않은 경우 알림 표시
+                            alert('로그인 후 이용해주세요.');
+                            // 기본 이벤트 동작(링크 이동) 방지
+                            event.preventDefault();
+                            // 로그인 페이지로 리디렉션
+                            window.location.href = "/login";
+                        }
+                    });
+                });
+            </script>
+
 
         </section>
         <section style="padding-bottom: 100px">
@@ -219,7 +257,7 @@
 </div>
 
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 
 

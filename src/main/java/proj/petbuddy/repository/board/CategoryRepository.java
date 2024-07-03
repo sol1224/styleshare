@@ -22,6 +22,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT i FROM Item i JOIN Category c ON i.category.id = c.id WHERE c.parent.id = 2 AND c.cateName = :category")
     Page<Item> menFindByCategoryParentIdAndName(@Param("category") String category, Pageable pageable);
 
-
-
 }

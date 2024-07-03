@@ -30,6 +30,7 @@ public class BoardService {
         Member member = memberRepository.findById(id);
         Board board = new Board(requestDto);
         board.setMember(member);
+        board.setWriter(member.getId());
 
         Board saveBoard = boardRepository.save(board);
         return new BoardResponseDTO(saveBoard);

@@ -69834,7 +69834,7 @@ a.btn_more span em, button.btn_more span em, input.btn_more span em, span.btn_mo
 }
 
 .container {
-    /*width: 1240px;*/
+    width: 90%;
     margin: 0 auto
 }
 
@@ -127498,7 +127498,7 @@ Featured section style
             text-align: center;
             font-size: 68px;
             cursor: pointer;
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0);
         }
 
         .choose_mac .nextprevleft,

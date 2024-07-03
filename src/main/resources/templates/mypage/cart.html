@@ -5,7 +5,7 @@
 <head>
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.2/components/logins/login-12/assets/css/login-12.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 
 
@@ -199,9 +199,15 @@
             console.log("counterTotalAmt", counterTotalAmt);
 
             // 주문 요청 전에 충전 여부 확인
-            if (availableBalance < counterTotalAmt) {
-                alert("금액이 부족합니다. 충전해주세요.");
-                // 금액 부족 시 처리할 추가적인 로직을 작성하거나, 사용자에게 안내할 수 있습니다.
+            // if (availableBalance < counterTotalAmt) {
+            //     alert("금액이 부족합니다. 충전해주세요.");
+            //     // 금액 부족 시 처리할 추가적인 로직을 작성하거나, 사용자에게 안내할 수 있습니다.
+            //     return; // 금액이 부족하면 주문을 진행하지 않고 함수 종료
+            // }
+
+            if (availableBalance != 0 ) {
+                alert("결제완료 후 주문버튼을 눌러주세요.");
+                // 금액 부족 시 처리할 추가적인 로직을 작성하거나, 사용자에게 안내할 수 있습니다.ㅇ
                 return; // 금액이 부족하면 주문을 진행하지 않고 함수 종료
             }
 
@@ -336,7 +342,7 @@
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
     <style>
         #counterTotalAmt {
@@ -666,7 +672,7 @@
                                 </li>
                                 <li class="total">
                                     <strong>총 결제금액</strong>
-                                    <p><em id="counterTotalAmt" name="counterTotalAmt" th:field="counterTotalAmt">0</em>원
+                                    <p><em id="counterTotalAmt" name="counterTotalAmt" th:field="counterTotalAmt">3,000</em>원
                                     </p>
                                 </li>
                                 <li class="point">
@@ -677,7 +683,7 @@
                                     <strong style="color: black">보유 충전금</strong>
                                     <p id="calculationOfAmount" name="calculationOfAmount" type="hidden"
                                        th:field="calculationOfAmount" style="color: black"
-                                       th:text="${member.money != null && member.money != null ? (#numbers.formatInteger(member.money, 3, 'COMMA') + '원') : '0원'}">
+                                       th:text="${member.money != null && member.money != null && member.money != 0 ? (#numbers.formatInteger(member.money, 3, 'COMMA') + '원') : '0원'}">
                                         0원</p>
                                 </li>
                                 <li class="point">
@@ -708,7 +714,7 @@
     </body>
 
     <footer>
-        <div th:replace="/fragments/footer.html :: footer"></div>
+        <div th:replace="fragments/footer.html :: footer"></div>
     </footer>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>

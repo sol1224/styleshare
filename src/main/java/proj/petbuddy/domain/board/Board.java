@@ -1,7 +1,10 @@
 package proj.petbuddy.domain.board;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,6 +13,7 @@ import proj.petbuddy.domain.category.Category;
 import proj.petbuddy.domain.mypage.Member;
 import proj.petbuddy.dto.board.BoardRequestDTO;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +41,10 @@ public class Board {
     private String content;
 
     @CreatedDate
-    private String createdAt;
+    private LocalDate createdAt;
 
     @LastModifiedDate
-    private String updatedAt;
+    private LocalDate updatedAt;
 
     private String writer;
 
@@ -58,21 +62,23 @@ public class Board {
     private BoardType boardType;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Category category;
 
     // 게시글 UI에서 댓글을 바로 보여주기 위해 FetchType을 EAGER로 설정
     // 게시글이 삭제되면 댓글 또한 삭제되어야 하기 때문에 CascadeType.REMOVE 속성을 사용
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id desc") // 댓글 정렬
-    @JsonBackReference //순환참조 방지
+//    @JsonBackReference //순환참조 방지
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Board(Member member, Long id, String title, String content, String writer) {
+    public Board(Member member, Long id, String title, String content) {
         this.title = title;
         this.content = content;
         this.member = member;
-        this.writer = writer;
+//        this.writer = writer;
 //        this.viewCount = 0L;
 //        this.likeCount = 0L;
 //        this.delYN = "N";

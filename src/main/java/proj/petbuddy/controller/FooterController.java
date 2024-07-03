@@ -17,7 +17,7 @@ public class FooterController {
      **/
     @GetMapping("/brandIntro")
     public String brandIntro() {
-        return "/footerMenu/brandIntro";
+        return "footerMenu/brandIntro";
     }
 
     /**
@@ -25,7 +25,7 @@ public class FooterController {
      **/
     @GetMapping("/launching")
     public String launching() {
-        return "/footerMenu/launching";
+        return "footerMenu/launching";
     }
 
     /**
@@ -33,7 +33,7 @@ public class FooterController {
      **/
     @GetMapping("/posting")
     public String posting() {
-        return "/footerMenu/posting";
+        return "footerMenu/posting";
     }
 
     /**
@@ -41,6 +41,14 @@ public class FooterController {
      **/
     @GetMapping("/personalInformation")
     public String personalInformation() {
-        return "/footerMenu/personalInformation";
+        return "footerMenu/personalInformation";
+    }
+
+    /**
+     * 소셜미디어
+     **/
+    @GetMapping("/sns")
+    public String sns() {
+        return "footerMenu/sns";
     }
 }

@@ -20,18 +20,17 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class BoardRequestDTO {
 
     private Long id;
     @NotBlank(message = "제목을 입력해주세요.")
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String title;
 
     private Member member;
 
     @NotBlank(message = "내용을 입력해주세요.")
-    @Column(nullable = false, length = 10000)
+    @Column(length = 10000)
     private String content;
 
     private String writer;
@@ -52,7 +51,6 @@ public class BoardRequestDTO {
                 .title(title)
                 .content(content)
                 .member(member)
-                .writer(writer)
                 .build();
 
         return boards;

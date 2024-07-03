@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="reset.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
 </head>
 <style>
     #top_search input {
@@ -108,6 +108,7 @@
         text-align: center;
     }
 
+
     select {
         display: none;
     }
@@ -181,6 +182,7 @@
     .custom-select-arrow {
         position: absolute;
         top: 17px;
+        /*right: 15px;*/
         width: 14px;
         height: 14px;
     }
@@ -196,6 +198,8 @@
     }
 
     .custom-select-option:hover {
+        /*color: #ffffff;*/
+        /*background-color: #1172c4;*/
         box-sizing: border-box;
     }
 
@@ -212,6 +216,7 @@
 
     .flex-in-block {
         display: inline-flex;
+        /*float: left;*/
     }
 
 
@@ -232,23 +237,23 @@
         color: #FA5500
     }
 
-    .row-st {
+    .ro-st {
         position: relative;
         height: auto;
         margin: 0 auto;
         padding-top: 220px
     }
 
+    .ro-st2 {
+        position: relative;
+        width: 90%;
+        margin: 0 auto;
+    }
+
     .ul-st {
         text-align: center;
         font-size: small;
         margin-bottom: 12px
-    }
-
-    .ro-st {
-        position: relative;
-        width: 90%;
-        margin: 0 auto;
     }
 
     .di-none {
@@ -260,7 +265,7 @@
         padding-top: 18px;
     }
 
-    .h-st6 {
+    .h6-st {
         float: right;
         font-size: 13px !important;
     }
@@ -269,16 +274,12 @@
         width: 100%;
     }
 
-    .fe-st {
+    .div-st2 {
         margin: 0 auto;
         width: 1362px;
     }
 
-    .st-sm {
-        font-size: small
-    }
-
-    .te-st1 {
+    .di-st6 {
         margin-top: 10px;
         display: flow-root;
     }
@@ -288,26 +289,38 @@
         float: left;
     }
 
-    .di-st5 {
+    .div-st1 {
+        display: flex;
+        float: left
+    }
+
+    .st-sm {
+        font-size: small
+    }
+
+    .i-st {
+        font-size: small;
+        padding-top: 4px;
+        color: #cccccc;
+        margin-right: 2px;
+        float: left;
+    }
+
+    .di-st3 {
         display: inline-flex;
         align-items: baseline;
         float: left
     }
 
-    .di-arr {
-        display: flex;
-        float: left
+    .pa-st {
+        text-align: center;
+        color: black
     }
-
-    .i-st2 {
-        font-size: small;
-        padding-top: 4px;
-        color: #cccccc;
-        margin-right: 2px;
-        float: left
-    }
-    .pag-st {
-        text-align: center; color: black
+    .h3-f-s {
+        font-size: 42px;
+        font-family: ProximaNova-thin, "Noto Sans KR" !important;
+        font-weight: 100 !important;
+        margin-bottom: 40px;
     }
 </style>
 
@@ -316,43 +329,44 @@
     <!--Home page style-->
 
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
-    <div class="row row-st">
+    <div class="row ro-st">
         <div class="main_features fix roomy-70 wrapper">
             <div class="text-center">
-                <h3 class="h5-font mr-b-20">의류</h3>
-                <section>
-                    <ul class="ul-st">
-                        <a href="/women">
-                            <li class="li-float font-700">전체</li>
-                        </a>
-                        <a href="/women/outer" th:href="@{/women/outer}">
-                            <li class="li-float font-700">아우터</li>
-                        </a>
-                        <a href="/women/onepiece" th:href="@{/women/onepiece}">
-                            <li class="li-float font-700">원피스</li>
-                        </a>
-                        <a href="/women/shirt" th:href="@{/women/shirt}">
-                            <li class="li-float font-700">셔츠</li>
-                        </a>
-                        <a href="/women/tshirt" th:href="@{/women/tshirt}">
-                            <li class="li-float font-700">티셔츠</li>
-                        </a>
-                        <a href="/women/skirt" th:href="@{/women/skirt}">
-                            <li class="li-float font-700">스커트</li>
-                        </a>
-                        <a href="/women/denim" th:href="@{/women/denim}">
-                            <li class="li-float font-700">데님</li>
-                        </a>
-                        <a href="/women/pants" th:href="@{/women/pants}">
-                            <li class="li-float font-700">팬츠</li>
-                        </a>
-                    </ul>
-                    <br>
-                </section>
+                <h3 class="h5-font mr-b-20 h3-f-s">NEW ARRIVALS</h3>
+                <img src="/assets/images/new_m.png"><br><br>
+<!--                <section>-->
+<!--                    <ul class="ul-st">-->
+<!--                        <a href="/women">-->
+<!--                            <li class="li-float font-700">전체</li>-->
+<!--                        </a>-->
+<!--                        <a href="/women/outer" th:href="@{/women/outer}">-->
+<!--                            <li class="li-float font-700">아우터</li>-->
+<!--                        </a>-->
+<!--                        <a href="/women/onepiece" th:href="@{/women/onepiece}">-->
+<!--                            <li class="li-float font-700">원피스</li>-->
+<!--                        </a>-->
+<!--                        <a href="/women/shirt" th:href="@{/women/shirt}">-->
+<!--                            <li class="li-float font-700">셔츠</li>-->
+<!--                        </a>-->
+<!--                        <a href="/women/tshirt" th:href="@{/women/tshirt}">-->
+<!--                            <li class="li-float font-700">티셔츠</li>-->
+<!--                        </a>-->
+<!--                        <a href="/women/skirt" th:href="@{/women/skirt}">-->
+<!--                            <li class="li-float font-700">스커트</li>-->
+<!--                        </a>-->
+<!--                        <a href="/women/denim" th:href="@{/women/denim}">-->
+<!--                            <li class="li-float font-700">데님</li>-->
+<!--                        </a>-->
+<!--                        <a href="/women/pants" th:href="@{/women/pants}">-->
+<!--                            <li class="li-float font-700">팬츠</li>-->
+<!--                        </a>-->
+<!--                    </ul>-->
+<!--                    <br>-->
+<!--                </section>-->
             </div>
         </div>
     </div>
@@ -360,7 +374,7 @@
 
     <section id="features" class="features bg-white center">
         <div>
-            <div class="row ro-st">
+            <div class="row ro-st2">
                 <div class="main_features fix wrapper">
 
 
@@ -403,17 +417,17 @@
                         </div>
 
                         <div class="di-st2">
-                            <h6 class="h-st6"
+                            <h6 class="h6-st"
                                 th:text="${items != null and items.totalElements > 0 ? '총' + items.totalElements + '개' : '총0개'}"></h6>
                         </div>
 
                     </section>
 
                     <section class="wi-100">
-                        <div class="main_features fix fe-st">
+                        <div class="main_features fix div-st2">
                             <ul class="flex-in-block ul-st2" th:each="wi: ${items}">
                                 <li class="mr-right li-resize width-fix grid-item post-transition metal numberGreaterThan50">
-                                    <div class="di-arr">
+                                    <div class="div-st1">
                                         <a th:href="@{|/new/detail/${wi.id}|}">
                                             <img class="img-resize" th:src="${wi.imgStr}"></a>
                                     </div>
@@ -422,7 +436,7 @@
                                             <p class="font-title" th:text="${wi.brand}">SUNGBOON EDITOR</p>
                                             <p class="font-sm" th:text="${wi.name}">[24매] 딥 콜라겐 마스크팩(6BOX)</p>
                                         </div>
-                                        <div class="te-st1">
+                                        <div class="di-st6">
                                             <p class="price-st"
                                                th:text="${#numbers.formatInteger(wi.price, 3, 'COMMA') + '원'}">
                                                 24,500원</p>
@@ -431,8 +445,8 @@
                                                 45%</p>
                                         </div>
                                     </div>
-                                    <div class="di-st5">
-                                        <i class="fa-solid fa-heart i-st2"></i>
+                                    <div class="di-st3">
+                                        <i class="fa-solid fa-heart i-st"></i>
                                         <p class="st-sm" th:text="${wi.heart != 0 ? wi.heart: ''}">
                                             1523
                                         </p>
@@ -450,7 +464,7 @@
 
 
 <!--=================페이징 처리=================-->
-<nav class="pag-st">
+<nav class="pa-st">
     <div class="text-xs-center">
         <ul class="pagination justify-content-center first" id="pagination">
             <!-- 이전 -->
@@ -503,9 +517,9 @@
             const value = option.getAttribute('value'); // value 변수의 값을 설정합니다.
 
             if (value === 'selectOption1' || value === 'selectOption2' || value === 'selectOption3' || value === 'selectOption4' || value === 'selectOption5') {
-                url = `/women/select?value=${value}`;
+                url = `/new/select?value=${value}`;
             } else if (value === 'selectOption2-1' || value === 'selectOption2-2' || value === 'selectOption2-3' || value === 'selectOption2-4' || value === 'selectOption2-5') {
-                url = `/women/selectSell?value=${value}`;
+                url = `/new/selectSell?value=${value}`;
             } else {
                 console.log('Unexpected value:', value);
                 // 여기서 예기치 않은 `value`를 처리할 수 있습니다.
@@ -551,13 +565,12 @@
 
 </body>
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 </div>
 
 
 <!-- JS includes -->
-
 <script src="/assets/js/vendor/jquery-1.11.2.min.js"></script>
 <script src="/assets/js/vendor/bootstrap.min.js"></script>
 <script src="/assets/js/jquery.magnific-popup.js"></script>
@@ -569,5 +582,6 @@
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="/assets/js/plugins.js"></script>
 <script src="/assets/js/main.js"></script>
+
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
     <style>
         #top_search input {
@@ -321,7 +321,9 @@
             margin-bottom: 24px
         }
         .st-bold {
-            font-weight: bold
+            font-weight: bold;
+            border-top: 1px solid #ececec;
+            padding-top: 40px;
         }
         .di-none {
             display: none;
@@ -334,7 +336,7 @@
 <div class="culmn">
     <!--Home page style-->
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
     <div>
@@ -362,7 +364,7 @@
                                 <li th:text="${store.tel}">+ 82 (0)2 514 8822</li>
                                 <input id="check-btn" type="checkbox"/>
                                 <ul>
-                                    <p style="margin-top:10px; border-bottom: 1px solid #ececec; padding-bottom: 20px"
+                                    <p style="margin-top:10px; padding-bottom: 20px"
                                        class="detail-toggle"><U>상세 정보 더 보기</U></p>
                                     <li th:text="${store.time}" class="store-time di-none"></li>
                                     <li th:text="${store.time2}" class="store-time2 di-none"></li>
@@ -479,7 +481,7 @@
 </div>
 </script>
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 
 <!-- JS includes -->

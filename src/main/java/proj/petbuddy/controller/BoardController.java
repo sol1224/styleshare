@@ -1,5 +1,6 @@
 package proj.petbuddy.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -10,9 +11,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import proj.petbuddy.domain.board.Board;
-import proj.petbuddy.domain.board.FAQ;
 import proj.petbuddy.domain.board.Notice;
 import proj.petbuddy.domain.mypage.Member;
 import proj.petbuddy.dto.board.BoardRequestDTO;
@@ -21,8 +23,9 @@ import proj.petbuddy.dto.board.CommentDTO;
 import proj.petbuddy.repository.board.BoardRepository;
 import proj.petbuddy.repository.board.FAQRepository;
 import proj.petbuddy.repository.board.NoticeRepository;
+import proj.petbuddy.repository.member.MemberRepository;
 import proj.petbuddy.service.board.BoardService;
-import proj.petbuddy.service.board.CommentService;
+import proj.petbuddy.service.board.SearchBoardService;
 
 import java.util.List;
 
@@ -35,8 +38,8 @@ public class BoardController {
     private final FAQRepository faqRepository;
     private final BoardService boardService;
     private final NoticeRepository noticeRepository;
-    private final CommentService commentService;
-
+    private final SearchBoardService searchBoardService;
+    private final MemberRepository memberRepository;
 
 /** =============== 게시판 =============== **/
 
@@ -44,14 +47,23 @@ public class BoardController {
      * 신규 게시글 등록
      **/
     @GetMapping("/board/boardWrite")
-    public String write(Model model) {
-        model.addAttribute("board", new BoardRequestDTO());
+    public String write(@ModelAttribute BoardRequestDTO boardFormDto, Model model, @AuthenticationPrincipal User user) {
+        model.addAttribute("boardFormDto", new BoardRequestDTO());
         return "board/boardWrite";
     }
 
     @PostMapping("/board/boardWrite")
-    public String save(BoardRequestDTO requestDTO, @AuthenticationPrincipal User user) {
-        boardService.boardSave(user.getUsername(), requestDTO);
+    public String save(@Valid @ModelAttribute("boardFormDto") BoardRequestDTO boardFormDto, BindingResult bindingResult, @AuthenticationPrincipal User user, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "board/boardWrite";
+        }
+        try {
+            boardService.boardSave(user.getUsername(), boardFormDto);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "board/boardWrite";
+        }
         return "redirect:/board";
     }
 
@@ -60,15 +72,14 @@ public class BoardController {
      * 게시판 전체 목록
      **/
     @GetMapping("/board")
-    public String board(Model model, @PageableDefault(page = 0, size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+    public String board(Model model, @PageableDefault(page = 0, size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, @AuthenticationPrincipal User user,
                         @RequestParam(name = "page", defaultValue = "1") int page) {
         /** 아이템 **/
-        List<Board> board = boardRepository.findAll();
-
+        Page<Board> board = boardRepository.findByBoard(pageable);
         model.addAttribute("board", board);
 
         /** 페이징 처리 **/
-        Page<Board> boards = boardRepository.findAll(pageable);
+        Page<Board> boards = boardRepository.findByBoard(pageable);
 
         if (!boards.isEmpty()) {
             int pageNum = boards.getPageable().getPageNumber(); // 현재 페이지
@@ -78,6 +89,7 @@ public class BoardController {
             int endBlockPage = startBlockPage + pageBlock - 1;
             endBlockPage = Math.min(totalPages, endBlockPage); // 수정된 부분
 
+            model.addAttribute("user", user);
             model.addAttribute("currentPage", pageNum);
             model.addAttribute("boards", boards);
             model.addAttribute("startBlockPage", startBlockPage);
@@ -93,14 +105,9 @@ public class BoardController {
      **/
     @GetMapping("/news")
     public String news(Model model, @PageableDefault(page = 0, size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                        @RequestParam(name = "page", defaultValue = "1") int page) {
-        /** 아이템 **/
-        List<Board> board = boardRepository.findAll();
-
-        model.addAttribute("board", board);
-
+                       @RequestParam(name = "page", defaultValue = "1") int page) {
         /** 페이징 처리 **/
-        Page<Board> boards = boardRepository.findAll(pageable);
+        Page<Board> boards = boardRepository.findByBoardNews(pageable);
 
         if (!boards.isEmpty()) {
             int pageNum = boards.getPageable().getPageNumber(); // 현재 페이지
@@ -130,7 +137,8 @@ public class BoardController {
         CommentDTO comment = new CommentDTO();
 
         List<CommentDTO> comments = board.getComments();
-        System.out.println("사용자: " + user);
+
+
 
         // 사용자 정보와 게시글 작성자 정보가 일치하는지 확인하여 수정 버튼을 보이도록 설정
         boolean isAuthor = false; // 기본적으로 작성자가 아니라고 가정
@@ -144,6 +152,7 @@ public class BoardController {
         }
 
         model.addAttribute("user", user);
+
         model.addAttribute("isAuthor", isAuthor);
         model.addAttribute("comments", comments);
         model.addAttribute("board", board);
@@ -204,13 +213,22 @@ public class BoardController {
 
 
     /**
+     * =============== 회원 혜택 안내 ===============
+     **/
+    @GetMapping("/benefit")
+    public String benefit() {
+        return "board/memberBenefit";
+    }
+
+
+    /**
      * =============== 자주 묻는 질문 ===============
      **/
 
     @GetMapping("/faq")
     public String faq(Model model, @PageableDefault(page = 0, size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         /** 페이징 처리 **/
-        Page<FAQ> boards = faqRepository.findAll(pageable);
+        Page<Board> boards = boardRepository.findByBoardFA(pageable);
 
         int pageNum = boards.getPageable().getPageNumber() - 1; // 현재 페이지
         int totalPages = boards.getTotalPages();// 총 페이지수
@@ -238,10 +256,36 @@ public class BoardController {
 
 
     /**
-     * =============== 댓글 기능 ===============
+     * =============== 검색 기능 ===============
      **/
-    /** 댓글 삭제 **/
+    /**
+     * 검색
+     **/
+    @GetMapping("/board/search")
+    public String searchService(String keyword, Model model, @PageableDefault(size = 30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
 
-    /** 댓글 수정 **/
+        /** 페이징 처리 **/
+        Page<Board> boards = searchBoardService.search(keyword, pageable);
+
+
+        int pageNum = boards.getPageable().getPageNumber(); // 현재 페이지
+        int totalPages = boards.getTotalPages(); // 총 페이지수
+        int pageBlock = 5; // 블럭의 수
+        int startBlockPage = ((pageNum) / pageBlock) * pageBlock + 1; // 수정된 부분
+        int endBlockPage = startBlockPage + pageBlock - 1;
+        endBlockPage = Math.min(totalPages, endBlockPage); // 수정된 부분
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("boards", boards);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("startBlockPage", startBlockPage);
+        model.addAttribute("endBlockPage", endBlockPage);
+        model.addAttribute("totalPages", totalPages); // 추가된 부분
+
+
+        return "board/search";
+    }
+
+
 }

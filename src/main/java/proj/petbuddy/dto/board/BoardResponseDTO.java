@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import proj.petbuddy.domain.board.Board;
 import proj.petbuddy.domain.mypage.Member;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class BoardResponseDTO {
     private String title;
     private String writer;
     private String content;
-    private String createdAt, updatedAt;
+    private LocalDate createdAt, updatedAt;
     private Long view;
     //    private Long userSeq;
     private List<CommentDTO> comments;

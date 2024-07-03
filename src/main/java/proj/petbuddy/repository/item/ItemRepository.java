@@ -47,7 +47,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     /**
      * 라이프
      **/
-     @Query("SELECT i FROM Item i JOIN Category c ON i.category.id = c.id WHERE c.parent.id = 3")
+     @Query("SELECT i FROM Item i JOIN Category c ON i.category.id = c.id WHERE i.category.id = 3")
     Page<Item> findByAllLife(Pageable pageable);
 
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-    <div th:replace="/fragments/header.html :: headFragment"></div>
+    <div th:replace="fragments/header.html :: headFragment"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
     <style>
         #top_search input {
@@ -288,134 +288,12 @@
     </style>
 </head>
 
-<!--<body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">-->
-<!--<div class="culmn">-->
-<!--    &lt;!&ndash;Home page style&ndash;&gt;-->
-<!--    <nav>-->
-<!--        <div th:replace="/fragments/nav.html :: navbar"></div>-->
-<!--    </nav>-->
-
-
-<!--    <div>-->
-
-
-<!--        <div style="display: inline-flex">-->
-<!--            <div>-->
-<!--                <div id="map"></div>-->
-<!--                <div class="map-text" style="float:left; text-align:left; width:580px; margin-top: 300px">-->
-<!--                    <div>-->
-<!--                        <p>매장 검색</p>-->
-<!--                        <p><small>위치(예: 우편번호, 주소, 도시 등)를 입력하시면 가장 가까운 매장을 알려드립니다.</small></p>-->
-<!--                    </div>-->
-
-
-<!--                    <form method="get" action="#" role="search" style="margin-bottom: 30px">-->
-<!--                        <div id="top_search" style="width: 500px">-->
-<!--                            <input type="text" placeholder="도로명, 지역 또는 우편번호"-->
-<!--                                   maxlength="80" id="search" name="keyword">-->
-<!--                            <button class="btn_search" type="button">-->
-<!--                                <img src="/assets/images/wing.png" alt="" onclick="">-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </form>-->
-
-
-<!--                    <div style="width:100%; height:510px; overflow:auto; font-family: ProximaNova-Thin !important; font-size: 12px !important;">-->
-<!--                        <table style="width:100%; border:0; cellspacing:0; cellpadding:0">-->
-<!--                            <ul style="margin-bottom: 24px" th:each="store : ${storeList}">-->
-<!--                                <li th:text="${store.name}" style="font-weight: bold">에르메스 현대백화점 압구정본점</li>-->
-<!--                                <li th:text="${store.address}">강남구 압구정로 165 현대백화점 본점 1층</li>-->
-<!--                                <li th:text="${store.country}">06001 서울특별시, 대한민국</li>-->
-<!--                                <li th:text="${store.tel}">+ 82 (0)2 514 8822</li>-->
-<!--                                <li><a href="#"><U>상세 정보 더 보기</U></a></li>-->
-<!--                                <li style="margin-top:24px; border-bottom: 1px solid #ececec"></li>-->
-<!--                            </ul>-->
-<!--                        </table>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                <script type="text/javascript"-->
-<!--                        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=815055c6971c63ed8a26eee958161a12&libraries=clusterer"></script>-->
-<!--                <script th:inline="javascript" charset="UTF-8">-->
-<!--                    var map = new kakao.maps.Map(document.getElementById('map'), { // 지도를 표시할 div-->
-<!--                        center: new kakao.maps.LatLng(36.814623, 127.6358), // 지도의 중심좌표-->
-<!--                        level: 13 // 지도의 확대 레벨-->
-<!--                    });-->
-
-<!--                    // 마커 클러스터러를 생성합니다-->
-<!--                    // 마커 클러스터러를 생성할 때 disableClickZoom 값을 true로 지정하지 않은 경우-->
-<!--                    // 클러스터 마커를 클릭했을 때 클러스터 객체가 포함하는 마커들이 모두 잘 보이도록 지도의 레벨과 영역을 변경합니다-->
-<!--                    // 이 예제에서는 disableClickZoom 값을 true로 설정하여 기본 클릭 동작을 막고-->
-<!--                    // 클러스터 마커를 클릭했을 때 클릭된 클러스터 마커의 위치를 기준으로 지도를 1레벨씩 확대합니다-->
-<!--                    var clusterer = new kakao.maps.MarkerClusterer({-->
-<!--                        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체-->
-<!--                        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정-->
-<!--                        minLevel: 10, // 클러스터 할 최소 지도 레벨-->
-<!--                        disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다-->
-<!--                    });-->
-
-<!--                    var storeList = [[${storeList}]];-->
-
-<!--                    console.log("storeList", storeList);-->
-<!--                    var markers = []; // 마커 배열-->
-<!--                    var positions = []; // 마커 배열-->
-
-<!--                    // storeList 배열을 순회하면서 positions 배열에 저장-->
-<!--                    for (var i = 0; i < storeList.length; i++) {-->
-<!--                        var store = storeList[i];-->
-
-<!--                        // 상점의 xCoord와 yCoord를 숫자로 변환하여 position 객체 생성-->
-<!--                        var xCoord = parseFloat(store.xcoord);-->
-<!--                        var yCoord = parseFloat(store.ycoord);-->
-
-<!--                        var position = {-->
-<!--                            title: store.name,-->
-<!--                            lat: yCoord, // 위도-->
-<!--                            lng: xCoord  // 경도-->
-<!--                        };-->
-
-<!--                        // positions 배열에 위치 정보 추가-->
-<!--                        positions.push(position);-->
-
-<!--                        console.log("position", position);-->
-
-<!--                        // 새로운 마커 생성-->
-<!--                        var marker = new kakao.maps.Marker({-->
-<!--                            position: new kakao.maps.LatLng(position.lat, position.lng),-->
-<!--                            title: position.title // 마커에 상점 이름 추가-->
-<!--                        });-->
-<!--                        // 생성된 마커를 markers 배열에 추가-->
-<!--                        markers.push(marker);-->
-<!--                    }-->
-<!--                    var clusterer = new kakao.maps.MarkerClusterer({-->
-<!--                        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체-->
-<!--                        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정-->
-<!--                        minLevel: 5, // 클러스터 할 최소 지도 레벨-->
-<!--                        markers: markers // 클러스터에 마커 추가-->
-<!--                    });-->
-
-
-<!--                    kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {-->
-<!--                        var clickMarkers = cluster.getMarkers(); // 클릭한 클러스터에 속한 마커들을 가져옴-->
-<!--                        console.log("clickMarkers", clickMarkers);-->
-
-
-<!--                    });-->
-
-<!--                </script>-->
-<!--                </script>-->
-
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
 
 <body data-spy="scroll" data-target=".navbar-collapse" data-offset="100">
 <div class="culmn">
     <!--Home page style-->
     <nav>
-        <div th:replace="/fragments/nav.html :: navbar"></div>
+        <div th:replace="fragments/nav.html :: navbar"></div>
     </nav>
 
 
@@ -463,7 +341,7 @@
                 </div>
 
                 <script type="text/javascript"
-                        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=815055c6971c63ed8a26eee958161a12&libraries=clusterer"></script>
+                        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=&libraries=clusterer"></script>
                 <script th:inline="javascript" charset="UTF-8">
                     var map = new kakao.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
                         center: new kakao.maps.LatLng(36.814623, 127.6358), // 지도의 중심좌표
@@ -558,7 +436,7 @@
 </div>
 </script>
 <footer>
-    <div th:replace="/fragments/footer.html :: footer"></div>
+    <div th:replace="fragments/footer.html :: footer"></div>
 </footer>
 
 <!-- JS includes -->
